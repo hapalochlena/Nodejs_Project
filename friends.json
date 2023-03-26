@@ -1,0 +1,6 @@
+{ "friends": [
+  { "name": "Nandha", "importance": "A", "last contacted": 2 },
+  { "name": "Marco", "importance": "B", "last contacted": 1 },
+  { "name": "Caro", "importance": "C", "last contacted": 3 }
+  ]
+}
