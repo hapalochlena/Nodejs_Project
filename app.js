@@ -8,7 +8,7 @@ app.get('/test', (req, res) => {
 
 // Home Page
 app.get('/', (req, res) => {
-  res.status(200).send("<h1>Hello World</h1>");
+  res.status(200).send('<h1>Hello World</h1><br><a href="/friends">Show my friends</a>');
 })
 
 // 404 Page
@@ -36,7 +36,7 @@ app.get('/friends', async (req, res) => {
   try {
     const friends = await gettingFriends();
     console.log(friends);
-    res.status(200).json(friends)
+    res.status(200).send(friends)
   } catch (error) {
     console.log(error);
   }
