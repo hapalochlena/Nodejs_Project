@@ -6,15 +6,22 @@ app.get('/test', (req, res) => {
   res.send("Banana");
 })
 
-
+// Home Page
 app.get('/', (req, res) => {
-  res.send("<h1>Hello World</h1>");
+  res.status(200).send("<h1>Hello World</h1>");
+})
+
+// 404 Page
+app.all('*', (req, res) => {
+  res.status(404).send("Resource not found")
 })
 
 
-// Printing out the data from friends.json
+
+// Printing the data from friends.json to the browser
 
 const { readFile } = require('fs').promises
+
 const gettingFriends = async() => {
   try {
     const friends = await readFile('./friends.json', 'utf-8');
@@ -29,7 +36,7 @@ app.get('/friends', async (req, res) => {
   try {
     const friends = await gettingFriends();
     console.log(friends);
-    res.send(friends)
+    res.status(200).send(friends)
   } catch (error) {
     console.log(error);
   }
