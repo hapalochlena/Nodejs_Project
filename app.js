@@ -12,9 +12,9 @@ app.get('/', (req, res) => {
 })
 
 // 404 Page
-app.all('*', (req, res) => {
-  res.status(404).send("Resource not found")
-})
+// app.all('*', (req, res) => {
+//   res.status(404).send("Resource not found");
+// })
 
 
 
@@ -36,7 +36,7 @@ app.get('/friends', async (req, res) => {
   try {
     const friends = await gettingFriends();
     console.log(friends);
-    res.status(200).send(friends)
+    res.status(200).json(friends)
   } catch (error) {
     console.log(error);
   }
@@ -45,3 +45,12 @@ app.get('/friends', async (req, res) => {
 
 
 module.exports = app
+
+// LATER: FRONTEND
+// Using the static assets for frontend
+// app.use(express.static('./public'));
+// app.get('/', (req, res) => {
+//   res.sendFile(path.resolve(__dirname, './public/index.html'))
+      // * OPTION 1) ADDING TO STATIC ASSETS
+      // * OPTION 2) SSR
+// })
