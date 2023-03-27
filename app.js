@@ -53,11 +53,16 @@ const { readFile } = require('fs').promises
 
 const gettingJsonData = async() => {
   const jsonData = await readFile('./friends.json', 'utf-8');
-  console.log(jsonData);
+  // console.log(jsonData);
   return jsonData
 }
 
-gettingJsonData()
+gettingJsonData().then((jsonData) => {
+  const friends = JSON.parse(jsonData);
+  console.log(friends);
+  return friends
+})
+
 
 
 
