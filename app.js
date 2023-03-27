@@ -57,11 +57,20 @@ const gettingJsonData = async() => {
   return jsonData
 }
 
-gettingJsonData().then((jsonData) => {
-  const friends = JSON.parse(jsonData);
-  console.log(friends);
+const friends = async () => {
+  const jsonData = await gettingJsonData()
+  const friends = JSON.parse(jsonData)
+  // console.log(data);
   return friends
+}
+
+app.get('/friends', (req, res) => {
+  friends().then(data => {
+    console.log(data);
+    res.status(200).send(data);
+  })
 })
+
 
 
 
