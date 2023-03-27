@@ -43,10 +43,22 @@ app.get('/', (req, res) => {
 // })
 
 // Converting the data from friends.json into an object
-const { readFileSync } = require('fs')
-const jsonData = readFileSync('./friends.json', 'utf-8');
-const friends = JSON.parse(jsonData);
-console.log(friends[0].name);
+// const { readFileSync } = require('fs')
+// const jsonData = readFileSync('./friends.json', 'utf-8');
+// const friends = JSON.parse(jsonData);
+// console.log(friends);
+
+// Refactor to asynchronous method
+const { readFile } = require('fs').promises
+
+const gettingJsonData = async() => {
+  const jsonData = await readFile('./friends.json', 'utf-8');
+  console.log(jsonData);
+  return jsonData
+}
+
+gettingJsonData()
+
 
 
 
