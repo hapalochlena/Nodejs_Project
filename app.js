@@ -57,9 +57,36 @@ app.get('/friends/:id', async (req, res) => {
   const data = await friends();
   const selectedFriend = data.find(friend => friend.id === Number(friendId));
   console.log(selectedFriend);
+
+  if (!selectedFriend) {
+    return res.status(404).send("Friend not found")
+  }
+
   res.status(200).send(selectedFriend);
 });
 
+// Find friend by query params (name, importance, last contacted)
+app.get('/api/v1/query', async (req, res) => {
+  console.log(req.query);  // url: /api/v1/query?name=nandha
+  const { name, importance, lastContacted } = req.query;
+  const data = await friends();
+
+  if (name) {
+    const selectedFriend = data.find(friend => friend.name === name);
+    console.log(selectedFriend);
+    return res.status(200).send(selectedFriend)
+  } else if (importance) {
+    const selectedFriend = data.find(friend => friend.importance === importance);
+    console.log(selectedFriend);
+    return res.status(200).send(selectedFriend)
+  } else if (lastContacted) {
+    const selectedFriend = data.find(friend => friend.lastContacted === Number(lastContacted));
+    console.log(selectedFriend);
+    return res.status(200).send(selectedFriend)
+  } else {
+    return res.status(404)
+  }
+})
 
 
 
