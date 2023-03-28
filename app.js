@@ -66,29 +66,51 @@ app.get('/friends/:id', async (req, res) => {
 });
 
 // Find friend by query params (name, importance, last contacted)
+// app.get('/api/v1/query', async (req, res) => {
+//   console.log(req.query);  // url: /api/v1/query?name=nandha
+//   const { name, importance, lastContacted } = req.query;
+//   const data = await friends();
+
+//   if (name) {
+//     const selectedFriend = data.find(friend => friend.name === name);
+//     console.log(selectedFriend);
+//     return res.status(200).send(selectedFriend)
+//   } else if (importance) {
+//     const selectedFriend = data.find(friend => friend.importance === importance);
+//     console.log(selectedFriend);
+//     return res.status(200).send(selectedFriend)
+//   } else if (lastContacted) {
+//     const selectedFriend = data.find(friend => friend.lastContacted === Number(lastContacted));
+//     console.log(selectedFriend);
+//     return res.status(200).send(selectedFriend)
+//   } else {
+//     return res.status(404)
+//   }
+// })
+
+// Search & limit
 app.get('/api/v1/query', async (req, res) => {
   console.log(req.query);  // url: /api/v1/query?name=nandha
-  const { name, importance, lastContacted } = req.query;
+  const { search, limit } = req.query;
   const data = await friends();
+  let friendsData = [...data];
 
-  if (name) {
-    const selectedFriend = data.find(friend => friend.name === name);
-    console.log(selectedFriend);
-    return res.status(200).send(selectedFriend)
-  } else if (importance) {
-    const selectedFriend = data.find(friend => friend.importance === importance);
-    console.log(selectedFriend);
-    return res.status(200).send(selectedFriend)
-  } else if (lastContacted) {
-    const selectedFriend = data.find(friend => friend.lastContacted === Number(lastContacted));
-    console.log(selectedFriend);
-    return res.status(200).send(selectedFriend)
-  } else {
-    return res.status(404)
+  if (search) {
+    friendsData = friendsData.filter((friend) => {
+      return friend.name.startsWith(search)
+    })
   }
+
+  if (limit) {
+    friendsData = friendsData.slice(0, Number(limit))
+  }
+
+  if (friendsData < 1) {
+    res.status(200).json({ success: true, data: []})
+  }
+
+  res.status(200).json(friendsData)
 })
-
-
 
 
 
