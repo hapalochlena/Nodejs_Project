@@ -29,8 +29,9 @@ const gettingJsonData = async() => {
 
 const friends = async () => {
   const jsonData = await gettingJsonData()
+  // console.log(typeof jsonData); // typeof => string
   const friends = JSON.parse(jsonData)
-  // console.log(data);
+  // console.log(typeof friends); // typeof => object
   return friends
 }
 
