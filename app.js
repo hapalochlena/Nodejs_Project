@@ -17,38 +17,8 @@ app.get('/', (req, res) => {
 // })
 
 
-
-// Printing the data from friends.json to the browser
-
-// const { readFile } = require('fs').promises
-
-// const gettingFriends = async() => {
-//   try {
-//     const friends = await readFile('./friends.json', 'utf-8');
-//     // console.log(friends);
-//     return friends
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
-
-// app.get('/friends', async (req, res) => {
-//   try {
-//     const friends = await gettingFriends();
-//     console.log(friends);
-//     res.status(200).send(friends)
-//   } catch (error) {
-//     console.log(error);
-//   }
-// })
-
 // Converting the data from friends.json into an object
-// const { readFileSync } = require('fs')
-// const jsonData = readFileSync('./friends.json', 'utf-8');
-// const friends = JSON.parse(jsonData);
-// console.log(friends);
 
-// Refactor to asynchronous method
 const { readFile } = require('fs').promises
 
 const gettingJsonData = async() => {
@@ -64,12 +34,32 @@ const friends = async () => {
   return friends
 }
 
-app.get('/friends', (req, res) => {
-  friends().then(data => {
-    console.log(data);
-    res.status(200).send(data);
-  })
-})
+// Show all friends
+// app.get('/friends', (req, res) => {
+//   friends().then(data => {
+//     console.log(data);
+//     res.status(200).send(data);
+//   })
+// })
+
+// alternative syntax:
+app.get('/friends', async (req, res) => {
+  const data = await friends();
+  // console.log(data);
+  res.status(200).send(data);
+});
+
+// Find friend by id
+app.get('/friends/:id', async (req, res) => {
+  console.log(req.params);
+  const friendId = req.params.id;
+  console.log(friendId);
+  const data = await friends();
+  const selectedFriend = data.find(friend => friend.id === Number(friendId));
+  console.log(selectedFriend);
+  res.status(200).send(selectedFriend);
+});
+
 
 
 
