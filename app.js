@@ -106,6 +106,8 @@ app.get('/api/v1/query', async (req, res) => {
 
 
 module.exports = app
+module.exports = gettingJsonData
+module.exports = friends
 
 // LATER: FRONTEND
 // Using the static assets for frontend
