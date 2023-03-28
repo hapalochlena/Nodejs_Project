@@ -4,17 +4,17 @@ const friends = require('./app')
 
 
 // gettingJsonData()
-// test('Fetches data from ./friends.json', async () => {
-//   const jsonData = await gettingJsonData()
-//   const realData = [
-//     { "id": 1, "name": "nandha", "importance": "A", "lastContacted": 2 },
-//     { "id": 2, "name": "marco", "importance": "B", "lastContacted": 1 },
-//     { "id": 3, "name": "caro", "importance": "C", "lastContacted": 3 }
-//   ]
-//   console.log(typeof realData);
-//   // expect(gettingJsonData()).toEqual(realData)
-//   expect(jsonData).toEqual(realData)
-// })
+test('Fetches data from ./friends.json', async () => {
+  const jsonData = await gettingJsonData()
+  console.log(typeof jsonData);
+  const realDataObject = [
+    { "id": 1, "name": "nandha", "importance": "A", "lastContacted": 2 },
+    { "id": 2, "name": "marco", "importance": "B", "lastContacted": 1 },
+    { "id": 3, "name": "caro", "importance": "C", "lastContacted": 3 }
+  ]
+  const realDataJson = JSON.stringify(realDataObject)
+  expect(jsonData).toStrictEqual(realDataJson)
+})
 
 // friends()
 test('Converts json to js object', async () => {
@@ -22,4 +22,3 @@ test('Converts json to js object', async () => {
   const expectedObject = {}
   expect(typeof objectData).toStrictEqual(typeof expectedObject)
 })
-

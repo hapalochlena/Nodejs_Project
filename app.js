@@ -23,13 +23,13 @@ const { readFile } = require('fs').promises
 
 const gettingJsonData = async() => {
   const jsonData = await readFile('./friends.json', 'utf-8');
-  // console.log(jsonData);
+  // console.log(typeof jsonData);
   return jsonData
 }
 
 const friends = async () => {
   const jsonData = await gettingJsonData()
-  // console.log(typeof jsonData); // typeof => string
+  console.log(typeof jsonData); // typeof => string
   const friends = JSON.parse(jsonData)
   // console.log(typeof friends); // typeof => object
   return friends
