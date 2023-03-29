@@ -44,8 +44,4 @@ test('Fetches data from ./friends.json', async () => {
 //   expect(app.get('/friends', gettingJsonData, gettingFriends)).toBe(realfriendsObject)
 // })
 
-// // TDD - This is the first test written BEFORE the actual code !!
-// // Refactoring middleware => now testing app.get instead of ... for same result
 
-// ! How does app.get/app.post... testing work?
-// => "TypeError: app.get is not a function"

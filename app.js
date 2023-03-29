@@ -24,26 +24,26 @@ const { readFile } = require('fs').promises
 const gettingJsonData = async (req, res, next) => {
   const jsonData = await readFile('./friends.json', 'utf-8');
   console.log(typeof jsonData); // json string
-  // return jsonData
-  // res.status(200).send(jsonData)
-  next() // ! the error is here !!! status 500
-                // ! How to pass along data froma middleware function, if you don't have return?
+  req.jsonData = jsonData
+  console.log(req.jsonData);
+  next()
 }
 
-// const gettingFriends = (req, res, next) => {
-//   const jsonData = gettingJsonData()
-//   // console.log(typeof jsonData); //! typeof => string
-//   const friendsData = JSON.parse(jsonData)
-//   console.log(typeof friends); // typeof => object
-//   // return friendsData
-//   next(friendsData)
-// }
+const gettingFriends = (req, res, next) => {
+  req.friendsData = JSON.parse(req.jsonData)
+  console.log("MIDDLEWARE 2 ------------------>");
+  console.log(typeof req.friendsData);
+  console.log(req.friendsData);
+  next()
+}
 
 // * ROUTES
 
-app.get('/friends', gettingJsonData, (req, res) => {
-  const jsonData = gettingJsonData()
-  res.status(200).send(jsonData)
+// * app.use('/friends', [gettingJsonData, gettingFriends])
+// ! how to pass data into here ???
+
+app.get('/friends', [gettingJsonData, gettingFriends], (req, res) => {
+  res.status(200).send(req.friendsData)
 });
 
 // Find friend by id
@@ -70,6 +70,10 @@ app.get('/api/v1/query', async (req, res) => {
   const data = await friends(); // ! middleware function -> take this line out
   let friendsData = [...data];
 
+  // * NEXT STEP: MOVING ALL OF THIS INTO THE MIDDLEWARE WITH req.query
+    // const { x } = req.query
+    // if (x === 'y') ........
+  if (user === 'john')
   if (name) {
     friendsData = friendsData.find(friend => friend.name === name);
     console.log(friendsData);
