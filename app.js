@@ -23,14 +23,15 @@ const { readFile } = require('fs').promises
 
 const gettingJsonData = async() => {
   const jsonData = await readFile('./friends.json', 'utf-8');
-  // console.log(jsonData);
+  // console.log(typeof jsonData);
   return jsonData
 }
 
 const friends = async () => {
   const jsonData = await gettingJsonData()
+  console.log(typeof jsonData); // typeof => string
   const friends = JSON.parse(jsonData)
-  // console.log(data);
+  // console.log(typeof friends); // typeof => object
   return friends
 }
 
@@ -106,6 +107,8 @@ app.get('/api/v1/query', async (req, res) => {
 
 
 module.exports = app
+module.exports = gettingJsonData
+module.exports = friends
 
 // LATER: FRONTEND
 // Using the static assets for frontend
