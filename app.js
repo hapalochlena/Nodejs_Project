@@ -37,6 +37,8 @@ const gettingFriends = async (req, res, next) => {
   res.send(friendsData)
 }
 
+// * ROUTES
+
 app.get('/friends', gettingJsonData, gettingFriends, (req, res) => {
   // const friendsData = gettingFriends()
 });
