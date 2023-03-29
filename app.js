@@ -23,9 +23,11 @@ const { readFile } = require('fs').promises
 
 const gettingJsonData = async (req, res, next) => {
   const jsonData = await readFile('./friends.json', 'utf-8');
-  console.log(typeof jsonData);
+  console.log(typeof jsonData); // json string
   // return jsonData
-  res.status(200).send(jsonData)
+  // res.status(200).send(jsonData)
+  next() // ! the error is here !!! status 500
+                // ! How to pass along data froma middleware function, if you don't have return?
 }
 
 // const gettingFriends = (req, res, next) => {
@@ -40,9 +42,8 @@ const gettingJsonData = async (req, res, next) => {
 // * ROUTES
 
 app.get('/friends', gettingJsonData, (req, res) => {
-  // const friendsData = gettingFriends()
-  // console.log();
-
+  const jsonData = gettingJsonData()
+  res.status(200).send(jsonData)
 });
 
 // Find friend by id
