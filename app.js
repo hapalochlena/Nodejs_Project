@@ -21,33 +21,25 @@ app.get('/', (req, res) => {
 
 const { readFile } = require('fs').promises
 
-const gettingJsonData = async() => {
+const gettingJsonData = async (req, res, next) => {
   const jsonData = await readFile('./friends.json', 'utf-8');
   // console.log(typeof jsonData);
-  return jsonData
+  // return jsonData
+  next(jsonData)
 }
 
-const friends = async () => {
+const gettingFriends = async (req, res, next) => {
   const jsonData = await gettingJsonData()
-  console.log(typeof jsonData); // typeof => string
-  const friends = JSON.parse(jsonData)
+  console.log(typeof jsonData); //! typeof => string
+  const friendsData = JSON.parse(jsonData)
   // console.log(typeof friends); // typeof => object
-  return friends
+  // return friends
+  next(friendsData)
 }
 
-// Show all friends
-// app.get('/friends', (req, res) => {
-//   friends().then(data => {
-//     console.log(data);
-//     res.status(200).send(data);
-//   })
-// })
-
-// alternative syntax:
-app.get('/friends', async (req, res) => {
-  const data = await friends();
-  // console.log(data);
-  res.status(200).send(data);
+app.get('/friends', gettingJsonData, gettingFriends, (req, res) => {
+  // const friendsData = friends()
+  res.status(200).send(friendsData)
 });
 
 // Find friend by id
@@ -71,7 +63,7 @@ app.get('/api/v1/query', async (req, res) => {
   console.log(req.query);  // url: /api/v1/query?name=nandha
   const { name, importance, lastContacted } = req.query;
   const { search, limit } = req.query;
-  const data = await friends();
+  const data = await friends(); // ! middleware function -> take this line out
   let friendsData = [...data];
 
   if (name) {
@@ -106,9 +98,15 @@ app.get('/api/v1/query', async (req, res) => {
 
 
 
-module.exports = app
+
+
+app.listen(3000, () => {
+  console.log("Listening on port 3000...");
+})
+
+module.exports.app = app
 module.exports = gettingJsonData
-module.exports = friends
+module.exports = gettingFriends
 
 // LATER: FRONTEND
 // Using the static assets for frontend

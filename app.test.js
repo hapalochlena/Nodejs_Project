@@ -1,6 +1,6 @@
 const app = require('./app') // oder const { app } = require('./app') ??????
 const gettingJsonData = require('./app')
-const friends = require('./app')
+const gettingFriends = require('./app')
 
 
 // gettingJsonData()
@@ -16,9 +16,12 @@ test('Fetches data from ./friends.json', async () => {
   expect(jsonData).toStrictEqual(realDataJson)
 })
 
-// friends()
+// gettingFriends()
 test('Converts json to js object', async () => {
-  const objectData = await friends();
+  const objectData = await gettingFriends();
   const expectedObject = {}
   expect(typeof objectData).toStrictEqual(typeof expectedObject)
 })
+
+// // TDD - This is the first test written BEFORE the actual code !!
+// // Refactoring middleware => now testing app.get instead of ... for same result
