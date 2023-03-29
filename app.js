@@ -23,24 +23,26 @@ const { readFile } = require('fs').promises
 
 const gettingJsonData = async (req, res, next) => {
   const jsonData = await readFile('./friends.json', 'utf-8');
-  // console.log(typeof jsonData);
+  console.log(typeof jsonData);
   // return jsonData
-  next(jsonData)
+  res.status(200).send(jsonData)
 }
 
-const gettingFriends = async (req, res, next) => {
-  const jsonData = await gettingJsonData()
-  console.log(typeof jsonData); //! typeof => string
-  const friendsData = JSON.parse(jsonData)
-  // console.log(typeof friends); // typeof => object
-  // return friendsData
-  res.send(friendsData)
-}
+// const gettingFriends = (req, res, next) => {
+//   const jsonData = gettingJsonData()
+//   // console.log(typeof jsonData); //! typeof => string
+//   const friendsData = JSON.parse(jsonData)
+//   console.log(typeof friends); // typeof => object
+//   // return friendsData
+//   next(friendsData)
+// }
 
 // * ROUTES
 
-app.get('/friends', gettingJsonData, gettingFriends, (req, res) => {
+app.get('/friends', gettingJsonData, (req, res) => {
   // const friendsData = gettingFriends()
+  // console.log();
+
 });
 
 // Find friend by id
@@ -107,7 +109,7 @@ app.listen(3000, () => {
 
 module.exports.app = app
 module.exports = gettingJsonData
-module.exports = gettingFriends
+// module.exports = gettingFriends
 
 // LATER: FRONTEND
 // Using the static assets for frontend
