@@ -33,13 +33,12 @@ const gettingFriends = async (req, res, next) => {
   console.log(typeof jsonData); //! typeof => string
   const friendsData = JSON.parse(jsonData)
   // console.log(typeof friends); // typeof => object
-  // return friends
-  next(friendsData)
+  // return friendsData
+  res.send(friendsData)
 }
 
 app.get('/friends', gettingJsonData, gettingFriends, (req, res) => {
-  // const friendsData = friends()
-  res.status(200).send(friendsData)
+  // const friendsData = gettingFriends()
 });
 
 // Find friend by id
