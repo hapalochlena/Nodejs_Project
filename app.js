@@ -47,59 +47,57 @@ app.get('/friends', [gettingJsonData, gettingFriends], (req, res) => {
 });
 
 // Find friend by id
-app.get('/friends/:id', async (req, res) => {
+app.get('/friends/:id', [gettingJsonData, gettingFriends], (req, res) => {
   console.log(req.params);
   const friendId = req.params.id;
   console.log(friendId);
-  const data = await friends();
-  const selectedFriend = data.find(friend => friend.id === Number(friendId));
+  const friendsData = req.friendsData
+  const selectedFriend = friendsData.find(friend => friend.id === Number(friendId));
   console.log(selectedFriend);
-
   if (!selectedFriend) {
     return res.status(404).send("Friend not found")
   }
-
   res.status(200).send(selectedFriend);
 });
 
 // Find friend by query params (name, importance, last contacted)
-app.get('/api/v1/query', async (req, res) => {
+app.get('/api/v1/query', [gettingJsonData, gettingFriends], (req, res) => {
   console.log(req.query);  // url: /api/v1/query?name=nandha
   const { name, importance, lastContacted } = req.query;
   const { search, limit } = req.query;
-  const data = await friends(); // ! middleware function -> take this line out
-  let friendsData = [...data];
+
+  const friendsData = req.friendsData
+  let selectedFriendsData = [...friendsData];
 
   // * NEXT STEP: MOVING ALL OF THIS INTO THE MIDDLEWARE WITH req.query
     // const { x } = req.query
     // if (x === 'y') ........
-  if (user === 'john')
   if (name) {
-    friendsData = friendsData.find(friend => friend.name === name);
-    console.log(friendsData);
+    selectedFriendsData = selectedFriendsData.find(friend => friend.name === name);
+    console.log(selectedFriendsData);
   }
   if (importance) {
-    friendsData = friendsData.find(friend => friend.importance === importance);
-    console.log(friendsData);
+    selectedFriendsData = selectedFriendsData.find(friend => friend.importance === importance);
+    console.log(selectedFriendsData);
   }
   if (lastContacted) {
-    friendsData = friendsData.find(friend => friend.lastContacted === Number(lastContacted));
-    console.log(friendsData);
+    selectedFriendsData = selectedFriendsData.find(friend => friend.lastContacted === Number(lastContacted));
+    console.log(selectedFriendsData);
   }
   if (search) {
-    friendsData = friendsData.filter((friend) => {
+    selectedFriendsData = selectedFriendsData.filter((friend) => {
       return friend.name.startsWith(search)
     })
   }
   if (limit) {
-    friendsData = friendsData.slice(0, Number(limit))
+    selectedFriendsData = selectedFriendsData.slice(0, Number(limit))
   }
 
-  if (friendsData < 1) {
+  if (selectedFriendsData < 1) {
     res.status(200).json({ success: true, data: []})
   }
 
-  res.status(200).json(friendsData)
+  res.status(200).json(selectedFriendsData)
 })
 
 
