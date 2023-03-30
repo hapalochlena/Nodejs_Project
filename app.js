@@ -39,18 +39,19 @@ const gettingFriends = (req, res, next) => {
 
 // * ROUTES
 
-// * app.use('/friends', [gettingJsonData, gettingFriends])
+app.use('/friends', [gettingJsonData, gettingFriends])
 // ! how to pass data into here ???
 
-app.get('/friends', [gettingJsonData, gettingFriends], (req, res) => {
+app.get('/friends', (req, res) => {
   res.status(200).send(req.friendsData)
 });
 
 // Find friend by id
-app.get('/friends/:id', [gettingJsonData, gettingFriends], (req, res) => {
+app.get('/friends/:id', (req, res) => {
   console.log(req.params);
   const friendId = req.params.id;
   console.log(friendId);
+
   const friendsData = req.friendsData
   const selectedFriend = friendsData.find(friend => friend.id === Number(friendId));
   console.log(selectedFriend);
