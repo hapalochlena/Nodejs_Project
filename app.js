@@ -62,43 +62,78 @@ app.get('/friends/:id', (req, res) => {
 });
 
 // Find friend by query params (name, importance, last contacted)
-app.get('/api/v1/query', [gettingJsonData, gettingFriends], (req, res) => {
+// app.get('/api/v1/query', [gettingJsonData, gettingFriends], (req, res) => {
+//   console.log(req.query);  // url: /api/v1/query?name=nandha
+//   const { name, importance, lastContacted } = req.query;
+//   const { search, limit } = req.query;
+
+//   const friendsData = req.friendsData
+//   let selectedFriendsData = [...friendsData];
+
+//   // * NEXT STEP: MOVING ALL OF THIS INTO THE MIDDLEWARE WITH req.query
+//     // const { x } = req.query
+//     // if (x === 'y') ........
+//   if (name) {
+//     selectedFriendsData = selectedFriendsData.find(friend => friend.name === name);
+//     console.log(selectedFriendsData);
+//   }
+//   if (importance) {
+//     selectedFriendsData = selectedFriendsData.find(friend => friend.importance === importance);
+//     console.log(selectedFriendsData);
+//   }
+//   if (lastContacted) {
+//     selectedFriendsData = selectedFriendsData.find(friend => friend.lastContacted === Number(lastContacted));
+//     console.log(selectedFriendsData);
+//   }
+//   if (search) {
+//     selectedFriendsData = selectedFriendsData.filter((friend) => {
+//       return friend.name.startsWith(search)
+//     })
+//   }
+//   if (limit) {
+//     selectedFriendsData = selectedFriendsData.slice(0, Number(limit))
+//   }
+
+//   if (selectedFriendsData < 1) {
+//     res.status(200).json({ success: true, data: []})
+//   }
+
+//   res.status(200).json(selectedFriendsData)
+// })
+
+app.get('/api/v1/query', async (req, res) => {
   console.log(req.query);  // url: /api/v1/query?name=nandha
   const { name, importance, lastContacted } = req.query;
   const { search, limit } = req.query;
+  const data = await friends();
+  let friendsData = [...data];
 
-  const friendsData = req.friendsData
-  let selectedFriendsData = [...friendsData];
-
-  // * NEXT STEP: MOVING ALL OF THIS INTO THE MIDDLEWARE WITH req.query
-    // const { x } = req.query
-    // if (x === 'y') ........
   if (name) {
-    selectedFriendsData = selectedFriendsData.find(friend => friend.name === name);
-    console.log(selectedFriendsData);
+    friendsData = friendsData.find(friend => friend.name === name);
+    console.log(friendsData);
   }
   if (importance) {
-    selectedFriendsData = selectedFriendsData.find(friend => friend.importance === importance);
-    console.log(selectedFriendsData);
+    friendsData = friendsData.find(friend => friend.importance === importance);
+    console.log(friendsData);
   }
   if (lastContacted) {
-    selectedFriendsData = selectedFriendsData.find(friend => friend.lastContacted === Number(lastContacted));
-    console.log(selectedFriendsData);
+    friendsData = friendsData.find(friend => friend.lastContacted === Number(lastContacted));
+    console.log(friendsData);
   }
   if (search) {
-    selectedFriendsData = selectedFriendsData.filter((friend) => {
+    friendsData = friendsData.filter((friend) => {
       return friend.name.startsWith(search)
     })
   }
   if (limit) {
-    selectedFriendsData = selectedFriendsData.slice(0, Number(limit))
+    friendsData = friendsData.slice(0, Number(limit))
   }
 
-  if (selectedFriendsData < 1) {
+  if (friendsData < 1) {
     res.status(200).json({ success: true, data: []})
   }
 
-  res.status(200).json(selectedFriendsData)
+  res.status(200).json(friendsData)
 })
 
 
