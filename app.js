@@ -31,7 +31,10 @@ const gettingJsonData = async (req, res, next) => {
 
 const gettingFriends = (req, res, next) => {
   req.friendsData = JSON.parse(req.jsonData)
+  next()
+}
 
+const queryingFriends = (req, res, next) => {
   const { name, importance, lastContacted } = req.query;
   const { search, limit } = req.query;
 
@@ -73,7 +76,7 @@ const gettingFriends = (req, res, next) => {
 // * ROUTES
 
 
-app.use('/friends', [gettingJsonData, gettingFriends])
+app.use('/friends', [gettingJsonData, gettingFriends, queryingFriends])
 
 app.get('/friends', (req, res) => {
   res.status(200).send(req.friendsData)
