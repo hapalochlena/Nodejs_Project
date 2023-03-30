@@ -23,24 +23,23 @@ const { readFile } = require('fs').promises
 
 const gettingJsonData = async (req, res, next) => {
   const jsonData = await readFile('./friends.json', 'utf-8');
-  console.log(typeof jsonData); // json string
+  // console.log(typeof jsonData); // json string
   req.jsonData = jsonData
-  console.log(req.jsonData);
+  // console.log(req.jsonData);
   next()
 }
 
 const gettingFriends = (req, res, next) => {
   req.friendsData = JSON.parse(req.jsonData)
-  console.log("MIDDLEWARE 2 ------------------>");
-  console.log(typeof req.friendsData);
-  console.log(req.friendsData);
+  // console.log("MIDDLEWARE 2 ------------------>");
+  // console.log(typeof req.friendsData);
+  // console.log(req.friendsData);
   next()
 }
 
 // * ROUTES
 
 app.use('/friends', [gettingJsonData, gettingFriends])
-// ! how to pass data into here ???
 
 app.get('/friends', (req, res) => {
   res.status(200).send(req.friendsData)
@@ -48,13 +47,12 @@ app.get('/friends', (req, res) => {
 
 // Find friend by id
 app.get('/friends/:id', (req, res) => {
-  console.log(req.params);
   const friendId = req.params.id;
-  console.log(friendId);
+  // console.log(friendId);
 
   const friendsData = req.friendsData
   const selectedFriend = friendsData.find(friend => friend.id === Number(friendId));
-  console.log(selectedFriend);
+  // console.log(selectedFriend);
   if (!selectedFriend) {
     return res.status(404).send("Friend not found")
   }
@@ -62,51 +60,12 @@ app.get('/friends/:id', (req, res) => {
 });
 
 // Find friend by query params (name, importance, last contacted)
-// app.get('/api/v1/query', [gettingJsonData, gettingFriends], (req, res) => {
-//   console.log(req.query);  // url: /api/v1/query?name=nandha
-//   const { name, importance, lastContacted } = req.query;
-//   const { search, limit } = req.query;
-
-//   const friendsData = req.friendsData
-//   let selectedFriendsData = [...friendsData];
-
-//   // * NEXT STEP: MOVING ALL OF THIS INTO THE MIDDLEWARE WITH req.query
-//     // const { x } = req.query
-//     // if (x === 'y') ........
-//   if (name) {
-//     selectedFriendsData = selectedFriendsData.find(friend => friend.name === name);
-//     console.log(selectedFriendsData);
-//   }
-//   if (importance) {
-//     selectedFriendsData = selectedFriendsData.find(friend => friend.importance === importance);
-//     console.log(selectedFriendsData);
-//   }
-//   if (lastContacted) {
-//     selectedFriendsData = selectedFriendsData.find(friend => friend.lastContacted === Number(lastContacted));
-//     console.log(selectedFriendsData);
-//   }
-//   if (search) {
-//     selectedFriendsData = selectedFriendsData.filter((friend) => {
-//       return friend.name.startsWith(search)
-//     })
-//   }
-//   if (limit) {
-//     selectedFriendsData = selectedFriendsData.slice(0, Number(limit))
-//   }
-
-//   if (selectedFriendsData < 1) {
-//     res.status(200).json({ success: true, data: []})
-//   }
-
-//   res.status(200).json(selectedFriendsData)
-// })
-
-app.get('/api/v1/query', async (req, res) => {
-  console.log(req.query);  // url: /api/v1/query?name=nandha
+app.get('/friends/api/query', (req, res) => {
   const { name, importance, lastContacted } = req.query;
   const { search, limit } = req.query;
-  const data = await friends();
-  let friendsData = [...data];
+
+  const x = req.friendsData
+  let friendsData = [...x];
 
   if (name) {
     friendsData = friendsData.find(friend => friend.name === name);
