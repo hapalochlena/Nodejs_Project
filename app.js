@@ -34,6 +34,16 @@ const gettingFriends = (req, res, next) => {
   next()
 }
 
+const selectingFriend = (req, res, next) => {
+  const friendId = req.params.id;
+  const friendsData = req.friendsData
+  const selectedFriend = friendsData.find(friend => friend.id === Number(friendId));
+  if (!selectedFriend) {
+    return res.status(404).send("Friend not found")
+  }
+  res.status(200).send(selectedFriend);
+}
+
 const queryingFriends = (req, res, next) => {
   const { name, importance, lastContacted } = req.query;
   const { search, limit } = req.query;
@@ -68,7 +78,7 @@ const queryingFriends = (req, res, next) => {
 
   req.friendsData = friendsData
 
-  next()
+  res.status(200).json(req.friendsData)
 }
 
 
@@ -76,29 +86,17 @@ const queryingFriends = (req, res, next) => {
 // * ROUTES
 
 
-app.use('/friends', [gettingJsonData, gettingFriends, queryingFriends])
+app.use('/friends', [gettingJsonData, gettingFriends])
 
 app.get('/friends', (req, res) => {
   res.status(200).send(req.friendsData)
 });
 
-// Find friend by id
-app.get('/friends/:id', (req, res) => {
-  const friendId = req.params.id;
-
-  const friendsData = req.friendsData
-  const selectedFriend = friendsData.find(friend => friend.id === Number(friendId));
-  if (!selectedFriend) {
-    return res.status(404).send("Friend not found")
-  }
-  res.status(200).send(selectedFriend);
+app.get('/friends/:id', selectingFriend, (req, res) => {
 });
 
-app.get('/friends/api/query', (req, res) => {
-  res.status(200).json(req.friendsData)
+app.get('/friends/api/query', queryingFriends, (req, res) => {
 })
-
-
 
 app.listen(3000, () => {
   console.log("Listening on port 3000...");
