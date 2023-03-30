@@ -17,50 +17,21 @@ app.get('/', (req, res) => {
 // })
 
 
+// * MIDDLEWARE
+
 // Converting the data from friends.json into an object
 
 const { readFile } = require('fs').promises
 
 const gettingJsonData = async (req, res, next) => {
   const jsonData = await readFile('./friends.json', 'utf-8');
-  // console.log(typeof jsonData); // json string
   req.jsonData = jsonData
-  // console.log(req.jsonData);
   next()
 }
 
 const gettingFriends = (req, res, next) => {
   req.friendsData = JSON.parse(req.jsonData)
-  // console.log("MIDDLEWARE 2 ------------------>");
-  // console.log(typeof req.friendsData);
-  // console.log(req.friendsData);
-  next()
-}
 
-// * ROUTES
-
-app.use('/friends', [gettingJsonData, gettingFriends])
-
-app.get('/friends', (req, res) => {
-  res.status(200).send(req.friendsData)
-});
-
-// Find friend by id
-app.get('/friends/:id', (req, res) => {
-  const friendId = req.params.id;
-  // console.log(friendId);
-
-  const friendsData = req.friendsData
-  const selectedFriend = friendsData.find(friend => friend.id === Number(friendId));
-  // console.log(selectedFriend);
-  if (!selectedFriend) {
-    return res.status(404).send("Friend not found")
-  }
-  res.status(200).send(selectedFriend);
-});
-
-// Find friend by query params (name, importance, last contacted)
-app.get('/friends/api/query', (req, res) => {
   const { name, importance, lastContacted } = req.query;
   const { search, limit } = req.query;
 
@@ -92,12 +63,37 @@ app.get('/friends/api/query', (req, res) => {
     res.status(200).json({ success: true, data: []})
   }
 
-  res.status(200).json(friendsData)
+  req.friendsData = friendsData
+
+  next()
+}
+
+
+
+// * ROUTES
+
+
+app.use('/friends', [gettingJsonData, gettingFriends])
+
+app.get('/friends', (req, res) => {
+  res.status(200).send(req.friendsData)
+});
+
+// Find friend by id
+app.get('/friends/:id', (req, res) => {
+  const friendId = req.params.id;
+
+  const friendsData = req.friendsData
+  const selectedFriend = friendsData.find(friend => friend.id === Number(friendId));
+  if (!selectedFriend) {
+    return res.status(404).send("Friend not found")
+  }
+  res.status(200).send(selectedFriend);
+});
+
+app.get('/friends/api/query', (req, res) => {
+  res.status(200).json(req.friendsData)
 })
-
-
-
-
 
 
 
