@@ -24,13 +24,13 @@ app.get('/friends/:id', selectingFriend, (req, res) => {
 app.get('/friends/api/query', queryingFriends, (req, res) => {
 })
 
-app.listen(3000, () => {
-  console.log("Listening on port 3000...");
-})
+// app.listen(3000, () => {
+//   console.log("Listening on port 3000...");
+// })
 
 module.exports.app = app
 module.exports = gettingJsonData
-// module.exports = gettingFriends
+module.exports = gettingFriends
 
 // LATER: FRONTEND
 // Using the static assets for frontend
