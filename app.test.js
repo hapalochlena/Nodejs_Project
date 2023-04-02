@@ -7,6 +7,14 @@ const queryingFriends = require('./app') // ? why not './middleware/middleware' 
 
 // * ROUTES
 
+// ? WHAT TO TEST ?
+
+// ? SUCCESS:
+// ? should respond with a 200 status code
+// ? should specify json in the content type header (can be important e.g. when you use high-level library like Axios to convert json into js object)
+// ? FAILURE:
+// ? should respond with a status code of 400
+
 // app.get('/')
 test('/', () => {
   expect().
