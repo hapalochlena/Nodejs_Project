@@ -2,6 +2,7 @@ const { readFile } = require('fs').promises
 
 const gettingJsonData = async (req, res, next) => {
   const jsonData = await readFile('./friends.json', 'utf-8');
+  // console.log(req);
   req.jsonData = jsonData
   next()
 }
@@ -12,8 +13,10 @@ const gettingFriends = (req, res, next) => {
 }
 
 const selectingFriend = (req, res, next) => {
+  console.log(req.params);
   const friendId = req.params.id;
-  const friendsData = req.friendsData
+  const friendsData = req.friendsData // from gettingFriends
+  req.testData = friendsData
   const selectedFriend = friendsData.find(friend => friend.id === Number(friendId));
   if (!selectedFriend) {
     return res.status(404).send("Friend not found")
