@@ -7,6 +7,8 @@ const queryingFriends = require('./app') // ? why not './middleware/middleware' 
 
 // * ROUTES
 
+// ! Testing routes later ... Get back to tests from tutorial as a starting point
+
 // ? WHAT TO TEST ?
 
 // ? SUCCESS:
