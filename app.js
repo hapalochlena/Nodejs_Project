@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const { gettingJsonData, gettingFriends, selectingFriend, queryingFriends } = require('./middleware/middleware')
+const { gettingJsonData, gettingFriends, selectingFriend, updatingFriend, deletingFriend, queryingFriends } = require('./middleware/middleware')
 
 // 404 Page
 // app.all('*', (req, res) => {
@@ -15,15 +15,35 @@ app.get('/', (req, res) => {
 app.use('/friends', [gettingJsonData, gettingFriends])
 
 app.get('/friends', (req, res) => {
+  // const output = JSON.stringify(req.friendsData)
+  // res.status(200).json({success: true, data: output})
   res.status(200).send(req.friendsData)
 });
 
 app.get('/friends/:id', selectingFriend, (req, res) => {
-  res.status(200).send(req.testData);
 });
 
 // ? 'query' needs to have 'api' before in the route; '/friends/query' doesn't work
 app.get('/friends/api/query', queryingFriends, (req, res) => {
+})
+
+// Trying out Postman
+// app.use(express.urlencoded())
+app.use(express.json())
+app.post('/postman', (req, res) => {
+  // const { username } = req.body
+  console.log(req.body);
+  // res.status(201) = successful post request
+  // res.status(400) = bad request
+        // .json({ success: false, msg: '...' })
+})
+
+// PUT - update friend
+app.put('/friends/:id', updatingFriend, (req, res) => {
+})
+
+// DELETE friend
+app.delete('/friends/:id', deletingFriend, (req, res) => {
 })
 
 app.listen(3000, () => {
@@ -31,9 +51,6 @@ app.listen(3000, () => {
 })
 
 module.exports.app = app
-module.exports = gettingJsonData
-// module.exports = gettingFriends
-
 // LATER: FRONTEND
 // Using the static assets for frontend
 // app.use(express.static('./public'));
