@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const { gettingJsonData, gettingFriends, selectingFriend, updatingFriend, queryingFriends } = require('./middleware/middleware')
+const { gettingJsonData, gettingFriends, selectingFriend, updatingFriend, deletingFriend, queryingFriends } = require('./middleware/middleware')
 
 // 404 Page
 // app.all('*', (req, res) => {
@@ -40,6 +40,10 @@ app.post('/postman', (req, res) => {
 
 // PUT - update friend
 app.put('/friends/:id', updatingFriend, (req, res) => {
+})
+
+// DELETE friend
+app.delete('/friends/:id', deletingFriend, (req, res) => {
 })
 
 app.listen(3000, () => {

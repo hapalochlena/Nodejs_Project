@@ -61,6 +61,23 @@ const updatingFriend = (req, res, next) => {
   // * tbd - some logic here that would actually persist the new data (in json file / database)
 }
 
+const deletingFriend = (req, res, next) => {
+  // selecting friend (same as in selectingFriend)
+  const friendId = req.params.id;
+  const friendsData = req.friendsData // from gettingFriends
+  const selectedFriend = friendsData.find(friend => friend.id === Number(friendId));
+  if (!selectedFriend) {
+    return res.status(404).send("Friend not found")
+  }
+
+  // * tbd - some logic here that would actually persist the new data (in json file / database)
+  // const newfriendsData = friendsData.filter((friend) => friend.id === Number(friendId))
+  // ... -> persist in json file / database
+  const msg = `You successfully deleted ${selectedFriend.name}`
+  console.log(msg);
+  res.status(200).json({success: true, data: msg})
+}
+
 const queryingFriends = (req, res, next) => {
   const { name, importance, lastContacted } = req.query;
   const { search, limit } = req.query;
@@ -98,4 +115,4 @@ const queryingFriends = (req, res, next) => {
   res.status(200).json(req.friendsData)
 }
 
-module.exports = { gettingJsonData, gettingFriends, selectingFriend, updatingFriend, queryingFriends }
+module.exports = { gettingJsonData, gettingFriends, selectingFriend, updatingFriend, deletingFriend, queryingFriends }
