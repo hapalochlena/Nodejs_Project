@@ -19,8 +19,10 @@ app.get('/friends', (req, res) => {
 });
 
 app.get('/friends/:id', selectingFriend, (req, res) => {
+  res.status(200).send(req.testData);
 });
 
+// ? 'query' needs to have 'api' before in the route; '/friends/query' doesn't work
 app.get('/friends/api/query', queryingFriends, (req, res) => {
 })
 
