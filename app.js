@@ -28,12 +28,21 @@ app.get('/friends/:id', selectingFriend, (req, res) => {
 app.get('/friends/api/query', queryingFriends, (req, res) => {
 })
 
+// Trying out Postman
+// app.use(express.urlencoded())
+app.use(express.json())
+app.post('/postman', (req, res) => {
+  // const { username } = req.body
+  console.log(req.body);
+  // res.status(201) = successful post request
+  // res.status(400) = bad request
+})
+
 app.listen(3000, () => {
   console.log("Listening on port 3000...");
 })
 
 module.exports.app = app
-
 // LATER: FRONTEND
 // Using the static assets for frontend
 // app.use(express.static('./public'));
