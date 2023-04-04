@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const router = express.Router();
 
 const { gettingJsonData, gettingFriends, selectingFriend, updatingFriend, deletingFriend, queryingFriends } = require('./middleware/middleware')
 
@@ -20,12 +21,10 @@ app.get('/friends', (req, res) => {
   res.status(200).send(req.friendsData)
 });
 
-app.get('/friends/:id', selectingFriend, (req, res) => {
-});
+app.get('/friends/:id', selectingFriend);
 
 // ? 'query' needs to have 'api' before in the route; '/friends/query' doesn't work
-app.get('/friends/api/query', queryingFriends, (req, res) => {
-})
+app.get('/friends/api/query', queryingFriends)
 
 // Trying out Postman
 // app.use(express.urlencoded())
@@ -39,12 +38,10 @@ app.post('/postman', (req, res) => {
 })
 
 // PUT - update friend
-app.put('/friends/:id', updatingFriend, (req, res) => {
-})
+app.put('/friends/:id', updatingFriend)
 
 // DELETE friend
-app.delete('/friends/:id', deletingFriend, (req, res) => {
-})
+app.delete('/friends/:id', deletingFriend)
 
 app.listen(3000, () => {
   console.log("Listening on port 3000...");
