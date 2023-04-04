@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 
-const { gettingJsonData, gettingFriends, selectingFriend, queryingFriends } = require('./middleware/middleware')
+const { gettingJsonData, gettingFriends, selectingFriend, updatingFriend, queryingFriends } = require('./middleware/middleware')
 
 // 404 Page
 // app.all('*', (req, res) => {
@@ -21,7 +21,6 @@ app.get('/friends', (req, res) => {
 });
 
 app.get('/friends/:id', selectingFriend, (req, res) => {
-  res.status(200).send(req.testData);
 });
 
 // ? 'query' needs to have 'api' before in the route; '/friends/query' doesn't work
@@ -36,6 +35,11 @@ app.post('/postman', (req, res) => {
   console.log(req.body);
   // res.status(201) = successful post request
   // res.status(400) = bad request
+        // .json({ success: false, msg: '...' })
+})
+
+// PUT - update friend
+app.put('/friends/:id', updatingFriend, (req, res) => {
 })
 
 app.listen(3000, () => {
