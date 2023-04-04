@@ -14,7 +14,7 @@ const gettingFriends = (req, res, next) => {
   next()
 }
 
-const selectingFriend = (req, res, next) => {
+const selectingFriend = (req, res) => {
   console.log(req.params);
   const friendId = req.params.id;
   const friendsData = req.friendsData // from gettingFriends
@@ -26,7 +26,7 @@ const selectingFriend = (req, res, next) => {
 }
 
 // PUT
-const updatingFriend = (req, res, next) => {
+const updatingFriend = (req, res) => {
   // selecting friend (same as in selectingFriend)
   const friendId = req.params.id;
   const friendsData = req.friendsData // from gettingFriends
@@ -61,7 +61,7 @@ const updatingFriend = (req, res, next) => {
   // * tbd - some logic here that would actually persist the new data (in json file / database)
 }
 
-const deletingFriend = (req, res, next) => {
+const deletingFriend = (req, res) => {
   // selecting friend (same as in selectingFriend)
   const friendId = req.params.id;
   const friendsData = req.friendsData // from gettingFriends
@@ -78,7 +78,7 @@ const deletingFriend = (req, res, next) => {
   res.status(200).json({success: true, data: msg})
 }
 
-const queryingFriends = (req, res, next) => {
+const queryingFriends = (req, res) => {
   const { name, importance, lastContacted } = req.query;
   const { search, limit } = req.query;
 
