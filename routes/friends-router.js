@@ -25,6 +25,8 @@ router.get('/api/query', [gettingJsonData, gettingFriends, queryingFriends])
 
 // ***
 
+// * POST, PUT, DELETE
+
 router.post('/postman', (req, res) => {
   // const { username } = req.body
   console.log(req.body);
@@ -36,6 +38,8 @@ router.post('/postman', (req, res) => {
 router.put('/:id', [gettingJsonData, gettingFriends, updatingFriend])
 
 router.delete('/:id', [gettingJsonData, gettingFriends, deletingFriend])
+
+// ***
 
 
 module.exports = router

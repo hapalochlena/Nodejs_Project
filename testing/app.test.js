@@ -1,9 +1,9 @@
 const { default: test } = require('node:test')
-const app = require('./app') // oder const { app } = require('./app') ??????
-const gettingJsonData = require('./app') // ? why not './middleware/middleware' ???
-const gettingFriends = require('./app') // ? why not './middleware/middleware' ???
-const selectingFriend = require('./app') // ? why not './middleware/middleware' ???
-const queryingFriends = require('./app') // ? why not './middleware/middleware' ???
+const app = require('../app') // oder const { app } = require('./app') ??????
+const gettingJsonData = require('../app') // ? why not './middleware/middleware' ???
+const gettingFriends = require('../app') // ? why not './middleware/middleware' ???
+const selectingFriend = require('../app') // ? why not './middleware/middleware' ???
+const queryingFriends = require('../app') // ? why not './middleware/middleware' ???
 
 // * ROUTES
 

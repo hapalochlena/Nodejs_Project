@@ -7,11 +7,6 @@
 // ! => Await the functions where the business logic happens
 // ! => Pass relevant info from request as arguments into the await functions
 
-
-// ! guess I don't need this anymore
-// const app = require('../app') // think I need this to use the app.use(express.json()) from app.js file for 'updatingFriend'
-
-
 const { readFile } = require('fs').promises
 
 // ! eigentlich service function outside of controller (takes relevant request info as argument)
@@ -49,7 +44,7 @@ const updatingFriend = (req, res) => {
     return res.status(404).send("Friend not found")
   }
 
-  // updating // ! currently can handle only one change at a time
+  // updating // * tbd - currently can handle only one change at a time
   const { name, importance, lastContacted } = req.body // app.use(express.json()) from app.js
   if (name) {
     const oldName = selectedFriend.name
