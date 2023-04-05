@@ -19,9 +19,6 @@ app.use('/', homeRoute) // ? might not need this if you have index.html as homep
 app.use('/friends', friendsRoutes)
 // ***
 
-// ! was ist hiermit?
-app.use('/friends', [gettingJsonData, gettingFriends])
-
 
 app.listen(3000, () => {
   console.log("Listening on port 3000...");

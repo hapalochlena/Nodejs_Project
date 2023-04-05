@@ -2,25 +2,28 @@ const express = require('express');
 const router = express.Router();
 
 const {
-  gettingJsonData, // ! einfügen statt app.use in app.js?
-  gettingFriends, // ! einfügen statt app.use in app.js?
+  gettingJsonData,
+  gettingFriends,
   selectingFriend,
   updatingFriend,
   deletingFriend,
   queryingFriends
-} = require('../middleware/middleware') // !
+} = require('../controllers/friends-controller')
 
-// ! gettingJsonData, gettingFriends ?
-router.get('/', (req, res) => {
+// * GET
+
+router.get('/', [gettingJsonData, gettingFriends], (req, res) => {
   // const output = JSON.stringify(req.friendsData)
   // res.status(200).json({success: true, data: output})
   res.status(200).send(req.friendsData)
 });
 
-router.get('/:id', selectingFriend);
+router.get('/:id', [gettingJsonData, gettingFriends, selectingFriend]);
 
 // ? 'query' needs to have 'api' before in the route; '/friends/query' doesn't work
-router.get('/api/query', queryingFriends)
+router.get('/api/query', [gettingJsonData, gettingFriends, queryingFriends])
+
+// ***
 
 router.post('/postman', (req, res) => {
   // const { username } = req.body
@@ -30,9 +33,9 @@ router.post('/postman', (req, res) => {
         // .json({ success: false, msg: '...' })
 })
 
-router.put('/:id', updatingFriend)
+router.put('/:id', [gettingJsonData, gettingFriends, updatingFriend])
 
-router.delete('/:id', deletingFriend)
+router.delete('/:id', [gettingJsonData, gettingFriends, deletingFriend])
 
 
 module.exports = router

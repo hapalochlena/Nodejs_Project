@@ -1,7 +1,10 @@
-const app = require('../app') // think I need this to use the app.use(express.json()) from app.js file for 'updatingFriend'
+// ! guess I don't need this anymore
+// const app = require('../app') // think I need this to use the app.use(express.json()) from app.js file for 'updatingFriend'
+
 
 const { readFile } = require('fs').promises
 
+// ! next???
 const gettingJsonData = async (req, res, next) => {
   const jsonData = await readFile('./friends.json', 'utf-8');
   // console.log(req);
@@ -9,6 +12,7 @@ const gettingJsonData = async (req, res, next) => {
   next()
 }
 
+// ! next???
 const gettingFriends = (req, res, next) => {
   req.friendsData = JSON.parse(req.jsonData)
   next()
@@ -115,4 +119,11 @@ const queryingFriends = (req, res) => {
   res.status(200).json(req.friendsData)
 }
 
-module.exports = { gettingJsonData, gettingFriends, selectingFriend, updatingFriend, deletingFriend, queryingFriends }
+module.exports = {
+  gettingJsonData,
+  gettingFriends,
+  selectingFriend,
+  updatingFriend,
+  deletingFriend,
+  queryingFriends
+}
