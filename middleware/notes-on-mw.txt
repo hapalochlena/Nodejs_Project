@@ -1,0 +1,10 @@
+Middleware functions are typically (although not always) passed through by all HTTP requests
+and do not fulfill the request, unless it's a case of returning an error response early.
+
+--> Example: only show list of friends after user has authorized:
+app.get('/api/items', (authorize), (req, res) => {
+  console.log(req.user); // cool: now we can log the user info when the items page is accessed
+  res.send('items')
+})
+
+It's the controller that ultimately *fulfills* the request with a successful response.

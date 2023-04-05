@@ -1,7 +1,15 @@
-const app = require('../app') // think I need this to use the app.use(express.json()) from app.js file for 'updatingFriend'
+// * REALITY/BIGGER APP: All of the above you don't want in your controllers. Why? Because controllers are responsibile for routing a given request where it needs to go for "processing". They don't directly deal with application logic, but send the request to code that does. Controllers should be fairly "thin" and not do a whole lot. So, a "book order" controller would take the request object after it's already been "pre-processed" by middleware and "successfully passed" it, pull out what data it needs from either the query string or body and send it to the service layer/domain logic layer to execute the business logic.
+// * It's the controller that ultimately FULFILLS the request with a successful response.
+
+// * Controller
+// ! => Make Controller functions ASYNC
+// ! => Read out the relevant info from request (body/params)
+// ! => Await the functions where the business logic happens
+// ! => Pass relevant info from request as arguments into the await functions
 
 const { readFile } = require('fs').promises
 
+// ! eigentlich service function outside of controller (takes relevant request info as argument)
 const gettingJsonData = async (req, res, next) => {
   const jsonData = await readFile('./friends.json', 'utf-8');
   // console.log(req);
@@ -9,12 +17,13 @@ const gettingJsonData = async (req, res, next) => {
   next()
 }
 
+// ! eigentlich service function outside of controller (takes relevant request info as argument)
 const gettingFriends = (req, res, next) => {
   req.friendsData = JSON.parse(req.jsonData)
   next()
 }
 
-const selectingFriend = (req, res, next) => {
+const selectingFriend = (req, res) => {
   console.log(req.params);
   const friendId = req.params.id;
   const friendsData = req.friendsData // from gettingFriends
@@ -26,7 +35,7 @@ const selectingFriend = (req, res, next) => {
 }
 
 // PUT
-const updatingFriend = (req, res, next) => {
+const updatingFriend = (req, res) => {
   // selecting friend (same as in selectingFriend)
   const friendId = req.params.id;
   const friendsData = req.friendsData // from gettingFriends
@@ -35,7 +44,7 @@ const updatingFriend = (req, res, next) => {
     return res.status(404).send("Friend not found")
   }
 
-  // updating // ! currently can handle only one change at a time
+  // updating // * tbd - currently can handle only one change at a time
   const { name, importance, lastContacted } = req.body // app.use(express.json()) from app.js
   if (name) {
     const oldName = selectedFriend.name
@@ -61,7 +70,7 @@ const updatingFriend = (req, res, next) => {
   // * tbd - some logic here that would actually persist the new data (in json file / database)
 }
 
-const deletingFriend = (req, res, next) => {
+const deletingFriend = (req, res) => {
   // selecting friend (same as in selectingFriend)
   const friendId = req.params.id;
   const friendsData = req.friendsData // from gettingFriends
@@ -78,7 +87,7 @@ const deletingFriend = (req, res, next) => {
   res.status(200).json({success: true, data: msg})
 }
 
-const queryingFriends = (req, res, next) => {
+const queryingFriends = (req, res) => {
   const { name, importance, lastContacted } = req.query;
   const { search, limit } = req.query;
 
@@ -115,4 +124,11 @@ const queryingFriends = (req, res, next) => {
   res.status(200).json(req.friendsData)
 }
 
-module.exports = { gettingJsonData, gettingFriends, selectingFriend, updatingFriend, deletingFriend, queryingFriends }
+module.exports = {
+  gettingJsonData,
+  gettingFriends,
+  selectingFriend,
+  updatingFriend,
+  deletingFriend,
+  queryingFriends
+}

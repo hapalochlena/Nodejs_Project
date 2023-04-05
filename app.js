@@ -1,56 +1,45 @@
 const express = require('express');
 const app = express();
 
-const { gettingJsonData, gettingFriends, selectingFriend, updatingFriend, deletingFriend, queryingFriends } = require('./middleware/middleware')
 
-// 404 Page
-// app.all('*', (req, res) => {
-//   res.status(404).send("Resource not found");
-// })
+// * IMPORT THE ROUTES from Router
+const homeRoute = require('./routes/homepage-router')
+const friendsRoutes = require('./routes/friends-router')
+// ***
 
-app.get('/', (req, res) => {
-  res.status(200).send('<h1>Hello World</h1><br><a href="/friends">Show my friends</a>');
-})
 
-app.use('/friends', [gettingJsonData, gettingFriends])
+// * IMPORT THE MIDDLEWARE (as soon as we have any)
+// const logger = require('./middleware/logger')
+// const authorize = require('./middleware/authorize')
+// ***
 
-app.get('/friends', (req, res) => {
-  // const output = JSON.stringify(req.friendsData)
-  // res.status(200).json({success: true, data: output})
-  res.status(200).send(req.friendsData)
-});
 
-app.get('/friends/:id', selectingFriend, (req, res) => {
-});
-
-// ? 'query' needs to have 'api' before in the route; '/friends/query' doesn't work
-app.get('/friends/api/query', queryingFriends, (req, res) => {
-})
-
-// Trying out Postman
+// * MIDDLEWARE - requests pass through here before they go to controller / functions anywhere else can use the built-in middleware from here
+// app.use(express.static('./methods-public'))
 // app.use(express.urlencoded())
 app.use(express.json())
-app.post('/postman', (req, res) => {
-  // const { username } = req.body
-  console.log(req.body);
-  // res.status(201) = successful post request
-  // res.status(400) = bad request
-        // .json({ success: false, msg: '...' })
-})
+// app.use(logger) // * ––> notice we don't need route as argument here, because this is what every request passes through, so we would have to put it as argument into every single route; insteaad we put it into app.use here
+// app.use(authorize) // * ––> notice we don't need route as argument here, because this is what every request passes through, so we would have to put it as argument into every single route; insteaad we put it into app.use here
+// ***
 
-// PUT - update friend
-app.put('/friends/:id', updatingFriend, (req, res) => {
-})
 
-// DELETE friend
-app.delete('/friends/:id', deletingFriend, (req, res) => {
-})
+// * ROUTES
+app.use('/', homeRoute) // ? might not need this if you have index.html as homepage in 'public' and use app.use(express.static('./public')) => that will automatically be the homepage ?
+app.use('/friends', friendsRoutes)
+// ***
+
 
 app.listen(3000, () => {
   console.log("Listening on port 3000...");
 })
 
-module.exports.app = app
+
+
+
+
+
+
+
 // LATER: FRONTEND
 // Using the static assets for frontend
 // app.use(express.static('./public'));
