@@ -1,53 +1,39 @@
 const express = require('express');
 const app = express();
-const router = express.Router();
 
-const { gettingJsonData, gettingFriends, selectingFriend, updatingFriend, deletingFriend, queryingFriends } = require('./middleware/middleware')
+// * IMPORT THE ROUTES from Router
+const homeRoute = require('./routes/homepage-router')
+const friendsRoutes = require('./routes/friends-router')
+// ***
 
-// 404 Page
-// app.all('*', (req, res) => {
-//   res.status(404).send("Resource not found");
-// })
 
-app.get('/', (req, res) => {
-  res.status(200).send('<h1>Hello World</h1><br><a href="/friends">Show my friends</a>');
-})
-
-app.use('/friends', [gettingJsonData, gettingFriends])
-
-app.get('/friends', (req, res) => {
-  // const output = JSON.stringify(req.friendsData)
-  // res.status(200).json({success: true, data: output})
-  res.status(200).send(req.friendsData)
-});
-
-app.get('/friends/:id', selectingFriend);
-
-// ? 'query' needs to have 'api' before in the route; '/friends/query' doesn't work
-app.get('/friends/api/query', queryingFriends)
-
-// Trying out Postman
+// * USEFUL STUFF (static assets, parsing data)
+// app.use(express.static('./methods-public'))
 // app.use(express.urlencoded())
 app.use(express.json())
-app.post('/postman', (req, res) => {
-  // const { username } = req.body
-  console.log(req.body);
-  // res.status(201) = successful post request
-  // res.status(400) = bad request
-        // .json({ success: false, msg: '...' })
-})
+// ***
 
-// PUT - update friend
-app.put('/friends/:id', updatingFriend)
 
-// DELETE friend
-app.delete('/friends/:id', deletingFriend)
+// * ROUTES
+app.use('/', homeRoute) // ? might not need this if you have index.html as homepage in 'public' and use app.use(express.static('./public')) => that will automatically be the homepage ?
+app.use('/friends', friendsRoutes)
+// ***
+
+// ! was ist hiermit?
+app.use('/friends', [gettingJsonData, gettingFriends])
+
 
 app.listen(3000, () => {
   console.log("Listening on port 3000...");
 })
 
-module.exports.app = app
+
+
+
+
+
+
+
 // LATER: FRONTEND
 // Using the static assets for frontend
 // app.use(express.static('./public'));
