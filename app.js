@@ -6,11 +6,17 @@ const homeRoute = require('./routes/homepage-router')
 const friendsRoutes = require('./routes/friends-router')
 // ***
 
+// * IMPORT THE MIDDLEWARE (as soon as we have any)
+// const logger = require('./middleware/logger')
+// const authorize = require('./middleware/authorize')
+// ***
 
-// * USEFUL STUFF (static assets, parsing data)
+// * MIDDLEWARE
 // app.use(express.static('./methods-public'))
 // app.use(express.urlencoded())
 app.use(express.json())
+// app.use(logger) // * ––> notice we don't need route as argument here, because this is what every request passes through, so we would have to put it as argument into every single route; insteaad we put it into app.use here
+// app.use(authorize) // * ––> notice we don't need route as argument here, because this is what every request passes through, so we would have to put it as argument into every single route; insteaad we put it into app.use here
 // ***
 
 
