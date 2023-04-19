@@ -14,12 +14,12 @@ const friendsRoutes = require('./routes/friends-router');
 // ***
 
 
-// * MIDDLEWARE - requests pass through here before they go to controller / functions anywhere else can use the built-in middleware from here
+// * MIDDLEWARE - requests pass through here before they go to controller => functions anywhere else can use the built-in middleware from here
 // app.use(express.static('./methods-public'))
 // app.use(express.urlencoded())
 app.use(express.json());
-// app.use(logger) // * ––> notice we don't need route as argument here, because this is what every request passes through, so we would have to put it as argument into every single route; insteaad we put it into app.use here
-// app.use(authorize) // * ––> notice we don't need route as argument here, because this is what every request passes through, so we would have to put it as argument into every single route; insteaad we put it into app.use here
+// app.use(logger) // * ––> notice we don't need route as argument here, because this is where every request passes through, so we would have to put it as argument into every single route; insteaad we put it into app.use here
+// app.use(authorize) // * ––> notice we don't need route as argument here, because this is where every request passes through, so we would have to put it as argument into every single route; insteaad we put it into app.use here
 // ***
 
 

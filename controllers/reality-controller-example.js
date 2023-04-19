@@ -1,5 +1,5 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 
 
 // Controller
@@ -8,27 +8,27 @@ const router = express.Router()
 // ! => Await the functions where the business logic happens
 // ! => Pass relevant info from request as arguments into the await functions
 const createOrder = async (req, res, next) => {
-  // grab what we need from the request...
-  const {customerId, orderTotal, orderItems, paymentDetails} = req.body
+	// grab what we need from the request...
+	const {customerId, orderTotal, orderItems, paymentDetails} = req.body;
 
-  try {
-    // ...then route it to the appropriate business-logic-processing functions...
-    const customerData = await getCustomerData(customerId)
-    await processOrder(orderTotal, orderItems, paymentDetails, customerData)
-    await sendConfirmationEmailToCustomer(customerId, orderItems)
+	try {
+		// ...then route it to the appropriate business-logic-processing functions...
+		const customerData = await getCustomerData(customerId);
+		await processOrder(orderTotal, orderItems, paymentDetails, customerData);
+		await sendConfirmationEmailToCustomer(customerId, orderItems);
 
-    // ...then fulfill the request with the response object
-    res.sendStatus(201)
+		// ...then fulfill the request with the response object
+		res.sendStatus(201);
 
-    return
-  } catch (err) {
-    res.sendStatus(500)
+		return;
+	} catch (err) {
+		res.sendStatus(500);
 
-    return
-  }
-}
+		return;
+	}
+};
 
 // Route definition
-router.post('/order', createOrder)
+router.post('/order', createOrder);
 
-module.exports = router
+module.exports = router;
