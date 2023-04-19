@@ -27,7 +27,7 @@ router.get('/api/query', [gettingJsonData, gettingFriends, queryingFriends]);
 
 // * POST, PUT, DELETE
 
-router.post('/postman', (req, res) => {
+router.post('/postman', (req) => {
 	// const { username } = req.body
 	console.log(req.body);
 	// res.status(201) = successful post request
