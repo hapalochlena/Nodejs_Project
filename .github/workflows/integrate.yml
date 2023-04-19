@@ -1,0 +1,23 @@
+name: Node Continuous Integration # = workflow
+
+on: # = event that triggers workflow
+  push:
+    branches: [ main ]
+# pull_request:
+#   branches: [ main ]
+
+jobs: # = jobs that make up the workflow
+  test_pushed_code: # job 1 - TESTING
+    runs-on: ubuntu-latest # = the runner (virtual machine hosted by GitHub)
+    steps: # = steps of the job
+      - uses: actions/checkout@v2 # = action: cloning your repository to the runner
+                                  # GitHub doc: "You should use the checkout action any time your workflow will run against the repository's code."
+      - uses: actions/setup-node@v1 # = action: installing node on the runner
+                                    # GitHub doc: "This puts both the node and npm commands in your PATH."
+        with:
+          node-version: 19
+      - run: npm ci # = script: install dependencies
+        # GitHub doc: The run keyword tells the job to execute a command on the runner. In this case, you are using npm to install the dependencies.
+      # - run: npm run build
+      - run: npm test # = script
+
