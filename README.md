@@ -21,7 +21,9 @@ This project uses the following dependencies:
 ## How to run
 
 Install the dependencies with `npm install`.
+
 Run the tests with `npm test`. This will execute the test suite using Jest.
+
 Run the project locally with `npm start`.
 
 To run the project with Nodemon, use `npm run dev`.
