@@ -2,16 +2,16 @@
 
 Early version of a contact list app, to be further developed later.
 
-The main purpose of this early version is for training: to gain experience in the basics of Node.js/Express.js, as well as best practices for software projects (testing/TDD, deployment, etc.)
+The main purpose of this early version is for training: to gain experience in the basics of Node.js/Express.js, as well as best practices for software projects (testing/TDD, deployment, etc.).
 
 This training project was not developed following any specific tutorial or course.
 
 ## Prerequisites
-Node.js v19.8.1
-npm v8.1.2
+* Node.js v19.8.1
+* npm v8.1.2
 
 ## Dependencies
-This project has the following dependencies:
+This project uses the following dependencies:
 * Express v4.18.2
 * Nodemon v2.0.22
 * ESLint v8.37.0
