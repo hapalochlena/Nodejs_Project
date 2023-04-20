@@ -1,40 +1,53 @@
 const {fetchingFriends, selectingFriend, updatingFriendLogic, deletingFriendLogic} = require('../business-logic/friends-logic');
 
 const showingAllFriends = async (req, res) => {
-	const friends = await fetchingFriends();
-	res.status(200).send(friends);
+	try {
+		const friends = await fetchingFriends();
+		return res.status(200).send(friends);
+	} catch (error) {
+		return res.sendStatus(500);
+	}
 };
 
 const showingFriend = async (req, res) => {
-	const selectedFriend = await selectingFriend(req.params.id);
-	if (!selectedFriend) {
-		return res.status(404).send('Friend not found');
+	try {
+		const selectedFriend = await selectingFriend(req.params.id);
+		if (!selectedFriend) {
+			return res.status(404).send('Friend not found');
+		}
+		return res.status(200).send(selectedFriend);
+	} catch (error) {
+		return res.sendStatus(500);
 	}
-	res.status(200).send(selectedFriend);
 };
 
 const updatingFriend = async (req, res) => {
-	const id = req.params.id;
-	const { name, importance, lastContacted } = req.body; // app.use(express.json()) from app.js
-	const answer = await updatingFriendLogic(id, name, importance, lastContacted);
 
-	if (!answer) {
-		return res.status(404).send('Friend not found');
+	try {
+		const id = req.params.id;
+		const { name, importance, lastContacted } = req.body; // app.use(express.json()) from app.js
+		const answer = await updatingFriendLogic(id, name, importance, lastContacted);
+		if (!answer) {
+			return res.status(404).send('Friend not found');
+		}
+		console.log(answer);
+		return res.status(200).send(answer);
+	} catch (error) {
+		return res.sendStatus(500);
 	}
-
-	console.log(answer);
-	res.status(200).send(answer);
 };
 
 const deletingFriend = async (req, res) => {
-	const answer = await deletingFriendLogic(req.params.id);
-
-	if (!answer) {
-		return res.status(404).send('Friend not found');
+	try {
+		const answer = await deletingFriendLogic(req.params.id);
+		if (!answer) {
+			return res.status(404).send('Friend not found');
+		}
+		console.log(answer);
+		return res.status(200).json({success: true, data: answer});
+	} catch (error) {
+		return res.sendStatus(500);
 	}
-
-	console.log(answer);
-	res.status(200).json({success: true, data: answer});
 };
 
 
@@ -74,6 +87,7 @@ const deletingFriend = async (req, res) => {
 
 // 	res.status(200).json(req.friendsData);
 // };
+
 
 module.exports = {
 	showingAllFriends,
