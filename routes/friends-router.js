@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const {
+	showingAllFriends,
 	showingFriend,
 	updatingFriend,
 	deletingFriend,
@@ -10,14 +11,13 @@ const {
 
 // * GET
 
-// ! wieder reinkommentieren, als nächstes bearbeiten
-// router.get('/', [gettingJsonData, gettingFriends], (req, res) => {
-// 	// const output = JSON.stringify(req.friendsData)
-// 	// res.status(200).json({success: true, data: output})
-// 	res.status(200).send(req.friendsData);
-// });
+router.get('/', showingAllFriends, (req, res) => {
+	// const output = JSON.stringify(req.friendsData)
+	// res.status(200).json({success: true, data: output})
+	res.status(200).send(req.friendsData); // !
+});
 
-router.get('/:id', [showingFriend]);
+router.get('/:id', showingFriend);
 
 // ! wieder reinkommentieren, als nächstes bearbeiten
 // ? 'query' needs to have 'api' before in the route; '/friends/query' doesn't work

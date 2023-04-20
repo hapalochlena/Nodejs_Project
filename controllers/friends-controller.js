@@ -12,24 +12,20 @@
 // ! => Await the functions where the business logic happens
 // ! => Pass relevant info from request as arguments into the await functions
 
+const [fetchingFriends, selectingFriend] = require('../business-logic/friends-logic');
+
+const showingAllFriends = async (req, res) => {
+	const friends = await fetchingFriends();
+	res.status(200).send(friends);
+};
 
 // GET - SELECT FRIEND
-
-// router.get('/:id', [selectingFriend]);
-
-const selectingFriend = require('../business-logic/friends-logic');
-
 const showingFriend = async (req, res) => {
-	// console.log(req.params);
 	const selectedFriend = await selectingFriend(req.params.id);
-	// const friendsData = req.friendsData; // from gettingFriends
-
-	console.log(selectedFriend); // !
-
+	console.log(selectedFriend);
 	if (!selectedFriend) {
 		return res.status(404).send('Friend not found');
 	}
-
 	res.status(200).send(selectedFriend);
 };
 
@@ -129,6 +125,7 @@ const queryingFriends = (req, res) => {
 };
 
 module.exports = {
+	showingAllFriends,
 	showingFriend,
 	updatingFriend,
 	deletingFriend,
