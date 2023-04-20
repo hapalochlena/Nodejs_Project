@@ -2,9 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const {
-	gettingJsonData,
-	gettingFriends,
-	selectingFriend,
+	showingFriend,
 	updatingFriend,
 	deletingFriend,
 	queryingFriends
@@ -12,16 +10,18 @@ const {
 
 // * GET
 
-router.get('/', [gettingJsonData, gettingFriends], (req, res) => {
-	// const output = JSON.stringify(req.friendsData)
-	// res.status(200).json({success: true, data: output})
-	res.status(200).send(req.friendsData);
-});
+// ! wieder reinkommentieren, als nächstes bearbeiten
+// router.get('/', [gettingJsonData, gettingFriends], (req, res) => {
+// 	// const output = JSON.stringify(req.friendsData)
+// 	// res.status(200).json({success: true, data: output})
+// 	res.status(200).send(req.friendsData);
+// });
 
-router.get('/:id', [gettingJsonData, gettingFriends, selectingFriend]);
+router.get('/:id', [showingFriend]);
 
+// ! wieder reinkommentieren, als nächstes bearbeiten
 // ? 'query' needs to have 'api' before in the route; '/friends/query' doesn't work
-router.get('/api/query', [gettingJsonData, gettingFriends, queryingFriends]);
+// router.get('/api/query', [gettingJsonData, gettingFriends, queryingFriends]);
 
 // ***
 
@@ -35,9 +35,11 @@ router.post('/postman', (req) => {
 	// .json({ success: false, msg: '...' })
 });
 
-router.put('/:id', [gettingJsonData, gettingFriends, updatingFriend]);
+// ! wieder reinkommentieren, als nächstes bearbeiten
+// router.put('/:id', [gettingJsonData, gettingFriends, updatingFriend]);
 
-router.delete('/:id', [gettingJsonData, gettingFriends, deletingFriend]);
+// ! wieder reinkommentieren, als nächstes bearbeiten
+// router.delete('/:id', [gettingJsonData, gettingFriends, deletingFriend]);
 
 // ***
 

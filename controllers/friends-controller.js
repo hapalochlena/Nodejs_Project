@@ -1,4 +1,8 @@
-// * REALITY/BIGGER APP: All of the above you don't want in your controllers. Why? Because controllers are responsibile for routing a given request where it needs to go for "processing". They don't directly deal with application logic, but send the request to code that does. Controllers should be fairly "thin" and not do a whole lot. So, a "book order" controller would take the request object after it's already been "pre-processed" by middleware and "successfully passed" it, *****pull out what data it needs from either the query string or body***** and send it to the service layer/domain logic layer to execute the business logic.
+// * REALITY/BIGGER APP: All of the above you don't want in your controllers. Why? Because controllers are responsibile for
+// *****routing a given request where it needs to go for "processing"*****.
+// They don't directly deal with application logic, but send the request to code that does. Controllers should be fairly "thin" and not do a whole lot.
+// So, a "book order" controller would take the request object after it's already been "pre-processed" by middleware and "successfully passed" it,
+// *****pull out what data it needs from either the query string or body***** and send it to the service layer/domain logic layer to execute the business logic.
 // * It's the controller that ultimately FULFILLS the request with a successful response.
 
 // * Controller
@@ -8,32 +12,31 @@
 // ! => Await the functions where the business logic happens
 // ! => Pass relevant info from request as arguments into the await functions
 
-const { readFile } = require('fs').promises;
 
-// ! eigentlich service function outside of controller (takes relevant request info as argument)
-const gettingJsonData = async (req, res, next) => {
-	const jsonData = await readFile('./friends.json', 'utf-8');
-	// console.log(req);
-	req.jsonData = jsonData;
-	next();
-};
+// GET - SELECT FRIEND
 
-// ! eigentlich service function outside of controller (takes relevant request info as argument)
-const gettingFriends = (req, res, next) => {
-	req.friendsData = JSON.parse(req.jsonData);
-	next();
-};
+// router.get('/:id', [selectingFriend]);
 
-const selectingFriend = (req, res) => {
-	console.log(req.params);
-	const friendId = req.params.id;
-	const friendsData = req.friendsData; // from gettingFriends
-	const selectedFriend = friendsData.find(friend => friend.id === Number(friendId));
+const selectingFriend = require('../business-logic/friends-logic');
+
+const showingFriend = async (req, res) => {
+	// console.log(req.params);
+	const selectedFriend = await selectingFriend(req.params.id);
+	// const friendsData = req.friendsData; // from gettingFriends
+
+	console.log(selectedFriend); // !
+
 	if (!selectedFriend) {
 		return res.status(404).send('Friend not found');
 	}
+
 	res.status(200).send(selectedFriend);
 };
+
+
+
+
+///////////////////////////////////
 
 // PUT
 const updatingFriend = (req, res) => {
@@ -126,9 +129,7 @@ const queryingFriends = (req, res) => {
 };
 
 module.exports = {
-	gettingJsonData,
-	gettingFriends,
-	selectingFriend,
+	showingFriend,
 	updatingFriend,
 	deletingFriend,
 	queryingFriends
