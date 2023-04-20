@@ -1,9 +1,10 @@
 // const { default: test } = require('node:test');
 const app = require('../app'); // oder const { app } = require('./app') ??????
-const gettingJsonData = require('../app'); // ? why not './middleware/middleware' ???
-const gettingFriends = require('../app'); // ? why not './middleware/middleware' ???
-const selectingFriend = require('../app'); // ? why not './middleware/middleware' ???
-const queryingFriends = require('../app'); // ? why not './middleware/middleware' ???
+const gettingJsonData = require('../controllers/friends-controller');
+const gettingFriends = require('../controllers/friends-controller');
+const selectingFriend = require('../controllers/friends-controller');
+console.log(typeof selectingFriend);
+const queryingFriends = require('../controllers/friends-controller');
 
 // * ROUTES
 
@@ -101,16 +102,16 @@ const queryingFriends = require('../app'); // ? why not './middleware/middleware
 //   expect(selectedFriend.id).toEqual(trueId)
 // })
 
-// test('Returns Marco for id = 2, and 404 if there is no friend with this id', () => {
-// 	// const req = {};
-// 	// const res = {};
-// 	// const next = jest.fn();
+test('Returns Marco for id = 2, and 404 if there is no friend with this id', () => {
+	// const req = {};
+	// const res = {};
+	// const next = jest.fn();
 
-// 	const selectedFriend = selectingFriend(req, res, next);
-// 	// ! selectedFriend = {}
-// 	console.log(JSON.stringify(selectedFriend) + '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
-// 	expect(selectedFriend.id).toBe(2);
-// });
+	const selectedFriend = selectingFriend();
+	// ! selectedFriend = {}
+	console.log(JSON.stringify(selectedFriend) + '<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<');
+	expect(selectedFriend.id).toBe(2);
+});
 
 // test('Returns Marco for id = 2, and 404 if there is no friend with this id', () => {
 //   const req = { params: {id : '2'} }

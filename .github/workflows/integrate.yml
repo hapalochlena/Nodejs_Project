@@ -7,17 +7,31 @@ on: # = event that triggers workflow
 #   branches: [ main ]
 
 jobs: # = jobs that make up the workflow
-  test_pushed_code: # job 1 - TESTING
-    runs-on: ubuntu-latest # = the runner (virtual machine hosted by GitHub)
-    steps: # = steps of the job
-      - uses: actions/checkout@v2 # = action: cloning your repository to the runner
-                                  # GitHub doc: "You should use the checkout action any time your workflow will run against the repository's code."
-      - uses: actions/setup-node@v1 # = action: installing node on the runner
-                                    # GitHub doc: "This puts both the node and npm commands in your PATH."
-        with:
-          node-version: 19
-      - run: npm ci # = script: install dependencies
-        # GitHub doc: The run keyword tells the job to execute a command on the runner. In this case, you are using npm to install the dependencies.
-      # - run: npm run build
-      - run: npm test # = script
-
+  # test_pushed_code: # job 1 - TESTING
+  #   runs-on: ubuntu-latest # = the runner (virtual machine hosted by GitHub)
+  #   steps: # = steps of the job
+  #     - uses: actions/checkout@v2 # = action: cloning your repository to the runner
+  #                                 # GitHub doc: "You should use the checkout action any time your workflow will run against the repository's code."
+  #     - name: Install Node.js
+  #       uses: actions/setup-node@v1 # = action: installing node on the runner
+  #                                   # GitHub doc: "This puts both the node and npm commands in your PATH."
+  #       with:
+  #         node-version: 19.x
+  #     - name: Install dependencies
+  #       run: npm ci # = script: install dependencies
+  #       # GitHub doc: The run keyword tells the job to execute a command on the runner. In this case, you are using npm to install the dependencies.
+  #     # - run: npm run build
+  #     - name: Run Jest testsuite
+  #       run: npm test # = script
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        w ith:
+          node-version: 19.x
+      - name: Install dependencies
+        run: npm ci
+      - name: Run ESLint
+        run: npm run lint
