@@ -5,8 +5,8 @@ const {
 	showingAllFriends,
 	showingFriend,
 	updatingFriend,
-	deletingFriend,
-	queryingFriends
+	deletingFriend
+	// queryingFriends
 } = require('../controllers/friends-controller');
 
 // * GET
@@ -19,7 +19,6 @@ router.get('/', showingAllFriends, (req, res) => {
 
 router.get('/:id', showingFriend);
 
-// ! wieder reinkommentieren, als nächstes bearbeiten
 // ? 'query' needs to have 'api' before in the route; '/friends/query' doesn't work
 // router.get('/api/query', [gettingJsonData, gettingFriends, queryingFriends]);
 
@@ -35,11 +34,9 @@ router.post('/postman', (req) => {
 	// .json({ success: false, msg: '...' })
 });
 
-// ! wieder reinkommentieren, als nächstes bearbeiten
-// router.put('/:id', [gettingJsonData, gettingFriends, updatingFriend]);
+router.put('/:id', updatingFriend);
 
-// ! wieder reinkommentieren, als nächstes bearbeiten
-// router.delete('/:id', [gettingJsonData, gettingFriends, deletingFriend]);
+router.delete('/:id', deletingFriend);
 
 // ***
 
