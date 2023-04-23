@@ -16,7 +16,6 @@
     "nodemon": "^2.0.22",
     "supertest": "^6.3.3"
   },
-
   "scripts": {
     "start": "node app.js",
     "test": "jest",
