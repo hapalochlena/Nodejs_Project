@@ -11,8 +11,10 @@ const fetchingFriends = async () => {
 const selectingFriend = async (id) => {
 	const friendsData = await fetchingFriends();
 	const selectedFriend = friendsData.find(friend => friend.id === Number(id));
+	console.log(selectedFriend);
 	return selectedFriend;
 };
+// selectingFriend();
 
 const updatingFriendLogic = async (id, name, importance, lastContacted) => {
 	const friendsData = await fetchingFriends();
