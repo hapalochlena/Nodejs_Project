@@ -22,11 +22,10 @@ const showingFriend = async (req, res) => {
 };
 
 const updatingFriend = async (req, res) => {
-
 	try {
 		const id = req.params.id;
 		const { name, importance, lastContacted } = req.body; // app.use(express.json()) from app.js
-		const answer = await updatingFriendLogic(id, name, importance, lastContacted);
+		const answer = await updatingFriendLogic({id, name: name, importance: importance, lastContacted: lastContacted});
 		if (!answer) {
 			return res.status(404).send('Friend not found');
 		}

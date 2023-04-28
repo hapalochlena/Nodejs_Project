@@ -37,4 +37,17 @@ describe('selectingFriend', () => {
 	});
 });
 
-
+describe('updatingFriendLogic', () => {
+	test('given id and name: returns a string stating you changed the old name to the new name', async () => {
+		const result = await updatingFriendLogic({id: 1, name: 'blubb'});
+		expect(result).toEqual('Changed nandha\'s name to blubb');
+	});
+	test('given id and importance: returns a string stating you changed this friends importance to the new importance', async () => {
+		const result = await updatingFriendLogic({id: 2, importance: 'C'});
+		expect(result).toEqual('Changed marco\'s importance to C');
+	});
+	test('given id and lastContacted: returns a string stating you changed this friends contact history to the new contact history', async () => {
+		const result = await updatingFriendLogic({id: 3, lastContacted: 55});
+		expect(result).toEqual('Changed caro\'s contact history to 55');
+	});
+});

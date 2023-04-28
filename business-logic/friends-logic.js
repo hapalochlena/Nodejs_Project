@@ -11,12 +11,10 @@ const fetchingFriends = async () => {
 const selectingFriend = async (id) => {
 	const friendsData = await fetchingFriends();
 	const selectedFriend = friendsData.find(friend => friend.id === Number(id));
-	console.log(selectedFriend);
 	return selectedFriend;
 };
-// selectingFriend();
 
-const updatingFriendLogic = async (id, name, importance, lastContacted) => {
+const updatingFriendLogic = async ({id, name = null, importance = null, lastContacted = null}) => {
 	const friendsData = await fetchingFriends();
 	const selectedFriend = friendsData.find(friend => friend.id === Number(id));
 
@@ -28,6 +26,7 @@ const updatingFriendLogic = async (id, name, importance, lastContacted) => {
 	}
 	if (importance) {
 		selectedFriend.importance = importance;
+		console.log(`Changed ${selectedFriend.name}'s importance to ${importance}`);
 		return `Changed ${selectedFriend.name}'s importance to ${importance}`;
 	}
 	if (lastContacted) {
