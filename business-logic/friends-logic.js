@@ -1,4 +1,24 @@
 const { readFile } = require('fs').promises;
+const knex = require('knex');
+
+const db = knex({
+	client: 'pg', // pg = posgres
+	connection: {   // tell it where the database lives
+		host : '127.0.0.1', // 127.0.0.1 = localhost => later different when hosted on a separate platform
+		port : 5432,  // port for Postgres
+		user : 'Lena',  // name as appears in the 'Owner' column when you do \d to see db tables
+		password : '',
+		database : 'friend-reminder'
+	}
+});
+
+// console.log(db.select('*').from('users'));
+// => logs the query statement that Knex builds
+
+// db.select('*').from('users'); // returns a promise => access it:
+// db.select('*').from('users').then(data => {
+// 	console.log(data);
+// });
 
 // fetching friends data from json file; converting it into js object
 const fetchingFriends = async () => {
@@ -12,6 +32,24 @@ const selectingFriend = async (id) => {
 	const friendsData = await fetchingFriends();
 	const selectedFriend = friendsData.find(friend => friend.id === Number(id));
 	return selectedFriend;
+};
+
+// ! here .then instead of aync/await
+const creatingFriendLogic = ({name, importance = null, lastContacted = null}) => {
+	const currentDate = new Date();
+	const isoDate = currentDate.toISOString();
+	console.log(name); // Nandha
+	console.log(importance); // A
+	console.log(lastContacted); // null
+
+
+	db('friends').insert({
+		name: name,
+		importance: importance,
+		last_contacted: '2023-04-30T19:10:26.920Z', // ! should be lastContacted
+		user_id: 1, // ! userId
+		added: '2023-04-30T19:10:26.920Z'
+	}).then(console.log).catch(error => console.log(error));
 };
 
 const updatingFriendLogic = async ({id, name = null, importance = null, lastContacted = null}) => {
@@ -48,4 +86,4 @@ const deletingFriendLogic = async (id) => {
 
 
 
-module.exports = {fetchingFriends, selectingFriend, updatingFriendLogic, deletingFriendLogic};
+module.exports = {fetchingFriends, selectingFriend, creatingFriendLogic, updatingFriendLogic, deletingFriendLogic};

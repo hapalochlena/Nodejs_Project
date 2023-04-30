@@ -1,4 +1,4 @@
-const {fetchingFriends, selectingFriend, updatingFriendLogic, deletingFriendLogic} = require('../business-logic/friends-logic');
+const {fetchingFriends, selectingFriend, creatingFriendLogic, updatingFriendLogic, deletingFriendLogic} = require('../business-logic/friends-logic');
 
 const showingAllFriends = async (req, res) => {
 	try {
@@ -17,7 +17,20 @@ const showingFriend = async (req, res) => {
 		}
 		return res.status(200).send(selectedFriend);
 	} catch (error) {
-		return res.sendStatus(500);
+		return res.sendStatus(500); // * which status code
+	}
+};
+
+const creatingFriend = async (req, res) => {
+	const { name, importance, lastContacted } = req.body;
+	console.log(req.body);
+
+	// const uderId = ... (access id of current user)
+	try {
+		const createdFriend = await creatingFriendLogic({name: name, importance: importance, lastContacted: lastContacted}); // + userId
+		return res.status(200).json({ success: true, data: createdFriend });
+	} catch (error) {
+		return res.sendStatus(500); // * which status code
 	}
 };
 
@@ -91,6 +104,7 @@ const deletingFriend = async (req, res) => {
 module.exports = {
 	showingAllFriends,
 	showingFriend,
+	creatingFriend,
 	updatingFriend,
 	deletingFriend
 	// queryingFriends

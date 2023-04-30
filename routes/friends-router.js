@@ -4,6 +4,7 @@ const router = express.Router();
 const {
 	showingAllFriends,
 	showingFriend,
+	creatingFriend,
 	updatingFriend,
 	deletingFriend
 	// queryingFriends
@@ -26,13 +27,7 @@ router.get('/:id', showingFriend);
 
 // * POST, PUT, DELETE
 
-router.post('/postman', (req) => {
-	// const { username } = req.body
-	console.log(req.body);
-	// res.status(201) = successful post request
-	// res.status(400) = bad request
-	// .json({ success: false, msg: '...' })
-});
+router.post('/postman', creatingFriend);
 
 router.put('/:id', updatingFriend);
 

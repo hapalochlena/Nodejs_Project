@@ -1,25 +1,5 @@
 const express = require('express');
 const app = express();
-const knex = require('knex');
-
-const db = knex({
-	client: 'pg', // pg = posgres
-	connection: {   // tell it where the database lives
-		host : '127.0.0.1', // 127.0.0.1 = localhost => later different when hosted on a separate platform
-		port : 5432,  // port for Postgres
-		user : 'Lena',  // name as appears in the 'Owner' column when you do \d to see db tables
-		password : '',
-		database : 'friend-reminder'
-	}
-});
-
-// console.log(db.select('*').from('users'));
-// => logs the query statement that Knex builds
-
-// db.select('*').from('users'); // returns a promise => access it:
-db.select('*').from('users').then(data => {
-	console.log(data);
-});
 
 
 // * IMPORT THE ROUTES from Router
