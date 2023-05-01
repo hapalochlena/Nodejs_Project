@@ -3,7 +3,7 @@ const {fetchingFriends, selectingFriend, creatingFriendLogic, updatingFriendLogi
 const showingAllFriends = async (req, res) => {
 	try {
 		const friends = await fetchingFriends();
-		return res.status(200).send(friends);
+		return res.status(200).json({success: true, data: friends});
 	} catch (error) {
 		return res.sendStatus(500);
 	}
@@ -15,7 +15,7 @@ const showingFriend = async (req, res) => {
 		if (!selectedFriend) {
 			return res.status(404).send('Friend not found');
 		}
-		return res.status(200).send(selectedFriend);
+		return res.status(200).json({success: true, data: selectedFriend});
 	} catch (error) {
 		return res.sendStatus(500); // * which status code
 	}

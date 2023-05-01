@@ -1,4 +1,4 @@
-const { readFile } = require('fs').promises;
+// const { readFile } = require('fs').promises;
 const knex = require('knex');
 
 const db = knex({
@@ -21,10 +21,10 @@ const db = knex({
 // });
 
 // fetching friends data from json file; converting it into js object
-const fetchingFriends = async () => {
-	const jsonData = await readFile('./friends.json', 'utf-8');
-	const friendsData = JSON.parse(jsonData);
-	return friendsData;
+const fetchingFriends = () => {
+	return db.select('*').from('friends').then(data => {
+		return data;
+	}).catch(error => console.log(error));
 };
 
 // selecting friend with id from request
@@ -46,9 +46,9 @@ const creatingFriendLogic = ({name, importance = null, lastContacted = null}) =>
 	db('friends').insert({
 		name: name,
 		importance: importance,
-		last_contacted: '2023-04-30T19:10:26.920Z', // ! should be lastContacted
+		last_contacted: isoDate, // ! should be lastContacted
 		user_id: 1, // ! userId
-		added: '2023-04-30T19:10:26.920Z'
+		added: isoDate
 	}).then(console.log).catch(error => console.log(error));
 };
 
