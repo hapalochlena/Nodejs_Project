@@ -23,9 +23,7 @@ const showingFriend = async (req, res) => {
 
 const creatingFriend = async (req, res) => {
 	const { name, importance, lastContacted } = req.body;
-	console.log(req.body);
-
-	// const uderId = ... (access id of current user)
+	// const userId = ... (access id of current user)
 	try {
 		const createdFriend = await creatingFriendLogic({name: name, importance: importance, lastContacted: lastContacted}); // + userId
 		return res.status(200).json({ success: true, data: createdFriend });
@@ -40,10 +38,9 @@ const updatingFriend = async (req, res) => {
 		const { name, importance, lastContacted } = req.body; // app.use(express.json()) from app.js
 		const answer = await updatingFriendLogic({id, name: name, importance: importance, lastContacted: lastContacted});
 		if (!answer) {
-			return res.status(404).send('Friend not found');
+			return res.status(404).json({ success: false, data: 'Friend not found' });
 		}
-		console.log(answer);
-		return res.status(200).send(answer);
+		return res.status(200).json({ success: true, data: answer });
 	} catch (error) {
 		return res.sendStatus(500);
 	}

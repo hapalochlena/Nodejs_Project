@@ -22,26 +22,25 @@ const db = knex({
 
 // fetching friends data from json file; converting it into js object
 const fetchingFriends = () => {
-	return db.select('*').from('friends').then(data => {
-		return data;
-	}).catch(error => console.log(error));
+	return db.select('*').from('friends')
+		.then(data => data)
+		.catch(error => console.log(error));
 };
 
 // selecting friend with id from request
+// ! REFACTOR TO DB STATEMENT
 const selectingFriend = async (id) => {
 	const friendsData = await fetchingFriends();
 	const selectedFriend = friendsData.find(friend => friend.id === Number(id));
 	return selectedFriend;
 };
 
-// ! here .then instead of aync/await
 const creatingFriendLogic = ({name, importance = null, lastContacted = null}) => {
 	const currentDate = new Date();
 	const isoDate = currentDate.toISOString();
 	console.log(name); // Nandha
 	console.log(importance); // A
 	console.log(lastContacted); // null
-
 
 	db('friends').insert({
 		name: name,
@@ -53,26 +52,59 @@ const creatingFriendLogic = ({name, importance = null, lastContacted = null}) =>
 };
 
 const updatingFriendLogic = async ({id, name = null, importance = null, lastContacted = null}) => {
-	const friendsData = await fetchingFriends();
-	const selectedFriend = friendsData.find(friend => friend.id === Number(id));
+	let array = [name, importance, lastContacted];
+
+	const dbUpdate = (property) => {
+		// if null...
+		if (property === name) {
+			// console.log(name);
+			db('friends')
+				.where('id', '=', id)
+				.update({
+					name: property
+				})
+				.returning('friends')
+        .then(data => console.log(data))
+        .catch(error => console.log(error));
+			// return db.select('*').from('friends')
+			// 	.then(data => {return data;})
+			// 	.catch(error => console.log(error));
+		} else if (property === importance) {
+			// console.log(property);
+			return db('friends')
+				.where('id', '=', id)
+				.update({
+					importance: importance
+				});
+		} else if (property === lastContacted) {
+			return db('friends')
+				.where('id', '=', id)
+				.update({
+					last_contacted: lastContacted
+				});
+		}
+	};
+
+	array.forEach(i => dbUpdate(i));
+	// [name, importance, lastContacted].forEach(i => dbUpdate(i));
 
 	// * tbd - currently can handle only one change at a time
-	if (name) {
-		const oldName = selectedFriend.name;
-		selectedFriend.name = name;
-		return `Changed ${oldName}'s name to ${name}`;
-	}
-	if (importance) {
-		selectedFriend.importance = importance;
-		console.log(`Changed ${selectedFriend.name}'s importance to ${importance}`);
-		return `Changed ${selectedFriend.name}'s importance to ${importance}`;
-	}
-	if (lastContacted) {
-		selectedFriend.lastContacted = lastContacted;
-		return `Changed ${selectedFriend.name}'s contact history to ${lastContacted}`;
-	}
+	// if (name) {
+	// 	const oldName = selectedFriend.name;
+	// 	selectedFriend.name = name;
+	// 	return `Changed ${oldName}'s name to ${name}`;
+	// }
+	// if (importance) {
+	// 	selectedFriend.importance = importance;
+	// 	console.log(`Changed ${selectedFriend.name}'s importance to ${importance}`);
+	// 	return `Changed ${selectedFriend.name}'s importance to ${importance}`;
+	// }
+	// if (lastContacted) {
+	// 	selectedFriend.lastContacted = lastContacted;
+	// 	return `Changed ${selectedFriend.name}'s contact history to ${lastContacted}`;
+	// }
 
-	// * tbd - some logic here that would actually persist the new data (in json file / database)
+
 };
 
 const deletingFriendLogic = async (id) => {
