@@ -52,35 +52,28 @@ const creatingFriendLogic = ({name, importance = null, lastContacted = null}) =>
 };
 
 const updatingFriendLogic = async (id, properties) => {
-	// let array = [importance, name, lastContacted];
-  // console.log(properties); // { name: 'xxxxxxx', importance: 'C', lastContacted: undefined }
   for (const [key, value] of Object.entries(properties)) {
-
     if (key === 'name') {
       // console.log(name);
-      db('friends')
+      return db('friends')
         .where('id', '=', id)
         .update({
           name: value
         })
         .returning('friends')
-        .then(data => console.log(data))
+        .then(data => data)
         .catch(error => console.log(error));
-      // return db.select('*').from('friends')
-      // 	.then(data => {return data;})
-      // 	.catch(error => console.log(error));
     } else if (key === 'importance') {
-      // console.log(property);
       return db('friends')
         .where('id', '=', id)
         .update({
           importance: value
         })
         .returning('friends')
-        .then(data => console.log(data))
+        .then(data => data)
         .catch(error => console.log(error));
     } else if (key === 'lastContacted') {
-      console.log("hi");
+      console.log('hi');
       // return db('friends')
       //   .where('id', '=', id)
       //   .update({
@@ -90,12 +83,7 @@ const updatingFriendLogic = async (id, properties) => {
       //   .then(data => console.log(data))
       //   .catch(error => console.log(error));
     }
-
-
-
-
   }
-
 };
 
 const deletingFriendLogic = async (id) => {
