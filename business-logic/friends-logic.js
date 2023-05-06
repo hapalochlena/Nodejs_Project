@@ -52,11 +52,12 @@ const creatingFriendLogic = ({name, importance = null, lastContacted = null}) =>
 };
 
 const updatingFriendLogic = async ({id, name = null, importance = null, lastContacted = null}) => {
-	let array = [name, importance, lastContacted];
+	let array = [importance, name, lastContacted];
+  console.log(array);
 
 	const dbUpdate = (property) => {
 		// if null...
-		if (property === name) {
+		if () {
 			// console.log(name);
 			db('friends')
 				.where('id', '=', id)
