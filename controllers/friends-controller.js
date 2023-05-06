@@ -35,10 +35,12 @@ const creatingFriend = async (req, res) => {
 const updatingFriend = async (req, res) => {
 	try {
 		const id = req.params.id;
-		const { name, importance, lastContacted } = req.body; // app.use(express.json()) from app.js
-		const answer = await updatingFriendLogic({id, name: name, importance: importance, lastContacted: lastContacted});
+		const properties = req.body; // app.use(express.json()) from app.js
+    // const { name, importance, lastContacted } = req.body
+    // const properties = { name, importance, lastContacted }
+		const answer = await updatingFriendLogic(id, properties);
 		if (!answer) {
-			return res.status(404).json({ success: false, data: 'Friend not found' });
+			return res.status(404).json({ success: false, data: 'Friend or property not found' });
 		}
 		return res.status(200).json({ success: true, data: answer });
 	} catch (error) {

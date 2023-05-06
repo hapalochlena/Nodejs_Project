@@ -51,60 +51,50 @@ const creatingFriendLogic = ({name, importance = null, lastContacted = null}) =>
 	}).then(console.log).catch(error => console.log(error));
 };
 
-const updatingFriendLogic = async ({id, name = null, importance = null, lastContacted = null}) => {
-	let array = [importance, name, lastContacted];
-  console.log(array);
+const updatingFriendLogic = async (id, properties) => {
+	// let array = [importance, name, lastContacted];
+  // console.log(properties); // { name: 'xxxxxxx', importance: 'C', lastContacted: undefined }
+  for (const [key, value] of Object.entries(properties)) {
 
-	const dbUpdate = (property) => {
-		// if null...
-		if () {
-			// console.log(name);
-			db('friends')
-				.where('id', '=', id)
-				.update({
-					name: property
-				})
-				.returning('friends')
+    if (key === 'name') {
+      // console.log(name);
+      db('friends')
+        .where('id', '=', id)
+        .update({
+          name: value
+        })
+        .returning('friends')
         .then(data => console.log(data))
         .catch(error => console.log(error));
-			// return db.select('*').from('friends')
-			// 	.then(data => {return data;})
-			// 	.catch(error => console.log(error));
-		} else if (property === importance) {
-			// console.log(property);
-			return db('friends')
-				.where('id', '=', id)
-				.update({
-					importance: importance
-				});
-		} else if (property === lastContacted) {
-			return db('friends')
-				.where('id', '=', id)
-				.update({
-					last_contacted: lastContacted
-				});
-		}
-	};
+      // return db.select('*').from('friends')
+      // 	.then(data => {return data;})
+      // 	.catch(error => console.log(error));
+    } else if (key === 'importance') {
+      // console.log(property);
+      return db('friends')
+        .where('id', '=', id)
+        .update({
+          importance: value
+        })
+        .returning('friends')
+        .then(data => console.log(data))
+        .catch(error => console.log(error));
+    } else if (key === 'lastContacted') {
+      console.log("hi");
+      // return db('friends')
+      //   .where('id', '=', id)
+      //   .update({
+      //     last_contacted: value
+      //   })
+      //   .returning('friends')
+      //   .then(data => console.log(data))
+      //   .catch(error => console.log(error));
+    }
 
-	array.forEach(i => dbUpdate(i));
-	// [name, importance, lastContacted].forEach(i => dbUpdate(i));
 
-	// * tbd - currently can handle only one change at a time
-	// if (name) {
-	// 	const oldName = selectedFriend.name;
-	// 	selectedFriend.name = name;
-	// 	return `Changed ${oldName}'s name to ${name}`;
-	// }
-	// if (importance) {
-	// 	selectedFriend.importance = importance;
-	// 	console.log(`Changed ${selectedFriend.name}'s importance to ${importance}`);
-	// 	return `Changed ${selectedFriend.name}'s importance to ${importance}`;
-	// }
-	// if (lastContacted) {
-	// 	selectedFriend.lastContacted = lastContacted;
-	// 	return `Changed ${selectedFriend.name}'s contact history to ${lastContacted}`;
-	// }
 
+
+  }
 
 };
 
