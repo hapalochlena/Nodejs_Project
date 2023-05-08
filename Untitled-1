@@ -1,0 +1,12 @@
+// INSERTING
+app.post('/register', (req, res) => {
+  const { email, name, password } = req.body
+  db('users').insert({
+    email: email, // receive it from req.body
+    name: name,
+    joined: new Date()
+  }).then(console.log);
+  res.send(database.users[database.users.length-1]);
+})
+
+

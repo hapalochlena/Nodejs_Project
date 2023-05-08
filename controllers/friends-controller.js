@@ -1,9 +1,9 @@
-const {fetchingFriends, selectingFriend, updatingFriendLogic, deletingFriendLogic} = require('../business-logic/friends-logic');
+const {fetchingFriends, selectingFriend, creatingFriendLogic, updatingFriendLogic, deletingFriendLogic} = require('../business-logic/friends-logic');
 
 const showingAllFriends = async (req, res) => {
 	try {
 		const friends = await fetchingFriends();
-		return res.status(200).send(friends);
+		return res.status(200).json({success: true, data: friends});
 	} catch (error) {
 		return res.sendStatus(500);
 	}
@@ -15,22 +15,34 @@ const showingFriend = async (req, res) => {
 		if (!selectedFriend) {
 			return res.status(404).send('Friend not found');
 		}
-		return res.status(200).send(selectedFriend);
+		return res.status(200).json({success: true, data: selectedFriend});
 	} catch (error) {
-		return res.sendStatus(500);
+		return res.sendStatus(500); // * which status code
+	}
+};
+
+const creatingFriend = async (req, res) => {
+	const { name, importance, lastContacted } = req.body;
+	// const userId = ... (access id of current user)
+	try {
+		const createdFriend = await creatingFriendLogic({name: name, importance: importance, lastContacted: lastContacted}); // + userId
+		return res.status(200).json({ success: true, data: createdFriend });
+	} catch (error) {
+		return res.sendStatus(500); // * which status code
 	}
 };
 
 const updatingFriend = async (req, res) => {
 	try {
 		const id = req.params.id;
-		const { name, importance, lastContacted } = req.body; // app.use(express.json()) from app.js
-		const answer = await updatingFriendLogic({id, name: name, importance: importance, lastContacted: lastContacted});
+		const properties = req.body; // app.use(express.json()) from app.js
+    // const { name, importance, lastContacted } = req.body
+    // const properties = { name, importance, lastContacted }
+		const answer = await updatingFriendLogic(id, properties);
 		if (!answer) {
-			return res.status(404).send('Friend not found');
+			return res.status(404).json({ success: false, data: 'Friend or property not found' });
 		}
-		console.log(answer);
-		return res.status(200).send(answer);
+		return res.status(200).json({ success: true, data: answer });
 	} catch (error) {
 		return res.sendStatus(500);
 	}
@@ -40,9 +52,8 @@ const deletingFriend = async (req, res) => {
 	try {
 		const answer = await deletingFriendLogic(req.params.id);
 		if (!answer) {
-			return res.status(404).send('Friend not found');
+			return res.status(404).json({ success: false, data: 'Friend not found' });
 		}
-		console.log(answer);
 		return res.status(200).json({success: true, data: answer});
 	} catch (error) {
 		return res.sendStatus(500);
@@ -91,6 +102,7 @@ const deletingFriend = async (req, res) => {
 module.exports = {
 	showingAllFriends,
 	showingFriend,
+	creatingFriend,
 	updatingFriend,
 	deletingFriend
 	// queryingFriends
