@@ -29,10 +29,13 @@ const fetchingFriends = () => {
 
 // selecting friend with id from request
 // ! REFACTOR TO DB STATEMENT
-const selectingFriend = async (id) => {
-	const friendsData = await fetchingFriends();
-	const selectedFriend = friendsData.find(friend => friend.id === Number(id));
-	return selectedFriend;
+const selectingFriend = (id) => {
+	// const friendsData = await fetchingFriends();
+	// const selectedFriend = friendsData.find(friend => friend.id === Number(id));
+	// return selectedFriend;
+  return db('friends').where('id', id)
+    .then(data => data)
+    .catch(error => console.log(error));
 };
 
 const creatingFriendLogic = ({name, importance = null, lastContacted = null}) => {
