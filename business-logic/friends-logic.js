@@ -52,10 +52,11 @@ const creatingFriendLogic = ({name, importance = null, lastContacted = null}) =>
 };
 
 const updatingFriendLogic = async (id, properties) => {
+  // console.log(properties); // { name: 'Elly', importance: 'B' }
   for (const [key, value] of Object.entries(properties)) {
     if (key === 'name') {
       // console.log(name);
-      return db('friends')
+      db('friends')
         .where('id', '=', id)
         .update({
           name: value
