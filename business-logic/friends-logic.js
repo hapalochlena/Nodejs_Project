@@ -20,19 +20,13 @@ const db = knex({
 // 	console.log(data);
 // });
 
-// fetching friends data from json file; converting it into js object
 const fetchingFriends = () => {
 	return db.select('*').from('friends')
 		.then(data => data)
 		.catch(error => console.log(error));
 };
 
-// selecting friend with id from request
-// ! REFACTOR TO DB STATEMENT
 const selectingFriend = (id) => {
-	// const friendsData = await fetchingFriends();
-	// const selectedFriend = friendsData.find(friend => friend.id === Number(id));
-	// return selectedFriend;
   return db('friends').where('id', id)
     .then(data => data)
     .catch(error => console.log(error));
@@ -89,13 +83,13 @@ const updatingFriendLogic = async (id, properties) => {
   }
 };
 
-const deletingFriendLogic = async (id) => {
-	const friendsData = await fetchingFriends();
-	const selectedFriend = friendsData.find(friend => friend.id === Number(id));
-	// * tbd - some logic here that would actually persist the new data (in json file / database)
-	// const newfriendsData = friendsData.filter((friend) => friend.id === Number(friendId))
-	// ... -> persist in json file / database
-	return `You successfully deleted ${selectedFriend.name}`;
+const deletingFriendLogic = (id) => {
+  return db('friends')
+    .where('id', id)
+    .returning('*') // now the promise resolves with an array of the deleted rows, which contains the data of the deleted row(s)
+    .del()
+    .then(data => data) // without 'returning' returns 1 -> promise resolves to the number of rows deleted = 1
+    .catch(error => console.log(error));
 };
 
 

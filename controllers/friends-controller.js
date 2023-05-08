@@ -52,9 +52,8 @@ const deletingFriend = async (req, res) => {
 	try {
 		const answer = await deletingFriendLogic(req.params.id);
 		if (!answer) {
-			return res.status(404).send('Friend not found');
+			return res.status(404).json({ success: false, data: 'Friend not found' });
 		}
-		console.log(answer);
 		return res.status(200).json({success: true, data: answer});
 	} catch (error) {
 		return res.sendStatus(500);
