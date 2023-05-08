@@ -65,7 +65,7 @@ const updatingFriendLogic = async (id, properties) => {
         .then(data => data)
         .catch(error => console.log(error));
     } else if (key === 'importance') {
-      return db('friends')
+      db('friends')
         .where('id', '=', id)
         .update({
           importance: value
@@ -74,15 +74,14 @@ const updatingFriendLogic = async (id, properties) => {
         .then(data => data)
         .catch(error => console.log(error));
     } else if (key === 'lastContacted') {
-      console.log('hi');
-      // return db('friends')
-      //   .where('id', '=', id)
-      //   .update({
-      //     last_contacted: value
-      //   })
-      //   .returning('friends')
-      //   .then(data => console.log(data))
-      //   .catch(error => console.log(error));
+      return db('friends')
+        .where('id', '=', id)
+        .update({
+          last_contacted: value
+        })
+        .returning('friends')
+        .then(data => data)
+        .catch(error => console.log(error));
     }
   }
 };
