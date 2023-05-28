@@ -4,9 +4,35 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: nodejs18.x
+  # stage: v1 # stage dev / prod
+  region: eu-central-1
+  # timeout: 30
+  # memorySize: 512
+
+package:
+  excludeDevDependencies: true
+  patterns:
+    - '!node_modules/**'
+    - 'node_modules/serverless-http/**'
+    - 'node_modules/express/**'
+    - 'node_modules/body-parser/**'
+    - '!tests/**'
 
 functions:
   api:
     handler: index.handler
     events:
-      - httpApi: '*'
+      - httpApi: '*' # paths like 'GET /hello'
+
+# plugins:
+#   - serverless-webpack
+
+# custom:
+#   webpack:
+#     webpackConfig: 'webpack.config.js' # Name of webpack configuration file
+#     includeModules: false # Node modules configuration for packaging
+#     packager: 'npm' # Packager that will be used to package your external modules
+#     excludeFiles: # Provide a glob for files to ignore
+#       - tests/**
+#       - package.json
+#       # - .env
