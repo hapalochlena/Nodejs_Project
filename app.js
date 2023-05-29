@@ -29,7 +29,7 @@ app.use('/friends', friendsRoutes);
 // ***
 
 
-// ! !!!!!!! NOT NEEDED FOR PRODUCTION
+// ! NOT NEEDED FOR PRODUCTION when using Serverless ?
 app.listen(3000, () => {
 	console.log('Listening on port 3000...');
 });

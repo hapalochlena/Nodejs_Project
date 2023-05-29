@@ -13,16 +13,18 @@ package:
   excludeDevDependencies: true
   patterns:
     - '!node_modules/**'
-    - 'node_modules/serverless-http/**'
-    - 'node_modules/express/**'
-    - 'node_modules/body-parser/**'
+    # - 'node_modules/serverless-http/**'
+    # - 'node_modules/express/**'
+    # - 'node_modules/body-parser/**'
     - '!tests/**'
 
 functions:
-  api:
-    handler: index.handler
-    events:
-      - httpApi: '*' # paths like 'GET /hello'
+  hello: # lambda function called 'hello'
+    handler: index.hello # * => lambda handler = the 'hello' function in the 'index' file
+  # api: # lambda function called 'api'
+  #   handler: index.handler # * => lambda handler = the 'handler' function in the 'index' file
+  #   events:
+  #     - httpApi: '*' # paths like 'GET /hello'
 
 # plugins:
 #   - serverless-webpack
