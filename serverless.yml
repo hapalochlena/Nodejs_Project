@@ -21,10 +21,10 @@ package:
 functions:
   hello: # lambda function called 'hello'
     handler: index.hello # * => lambda handler = the 'hello' function in the 'index' file
-  # api: # lambda function called 'api'
-  #   handler: index.handler # * => lambda handler = the 'handler' function in the 'index' file
-  #   events:
-  #     - httpApi: '*' # paths like 'GET /hello'
+  api: # lambda function called 'api'
+    handler: index.handler # * => lambda handler = the 'handler' function in the 'index' file
+    events:
+      - httpApi: '*' # paths like 'GET /hello'
 
 # plugins:
 #   - serverless-webpack
