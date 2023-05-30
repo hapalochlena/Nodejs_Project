@@ -15,9 +15,16 @@ plugins:
 # custom:
 #   webpack:
 #     webpackConfig: 'webpack.config.js' # Name of webpack configuration file
-#     includeModules: false # Node modules configuration for packaging
-#     packager: 'npm' # Packager that will be used to package your external modules
-#     # excludeFiles: src/**/*.test.js
+#     includeModules: true # Node modules configuration for packaging
+#     # webpackIncludeModules:
+#     #   forceInclude:
+#     #     - pg
+custom:
+  webpack:
+    includeModules:
+      forceInclude:
+        - knex
+        - pg
 
 package:
   individually: true # we want each lambda to be packaged individually
@@ -27,6 +34,7 @@ package:
     # - 'node_modules/serverless-http/**'
     # - 'node_modules/express/**'
     # - 'node_modules/body-parser/**'
+    # - 'node_modules/pg/**'
     - '!tests/**'
 
 # * Remember to place this code within the appropriate section of your serverless.yml file, such as under the functions section if you're associating the layer with a specific function or under the provider section if the layer is meant to be used globally by all functions in your service.

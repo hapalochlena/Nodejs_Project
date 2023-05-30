@@ -23,13 +23,14 @@
     "nodemon": "^2.0.22",
     "serverless-webpack": "^5.11.0",
     "supertest": "^6.3.3",
-    "webpack": "^5.84.1"
+    "webpack": "^5.84.1",
+    "webpack-node-externals": "^3.0.0"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "node src/app.js",
     "test": "jest",
     "lint": "eslint .",
-    "dev": "nodemon app.js",
+    "dev": "nodemon src/app.js",
     "deploy": "sls deploy"
   }
 }
