@@ -40,3 +40,17 @@ module.exports = {
   //   new webpack.ContextReplacementPlugin(/knex\/lib\/dialects/)
   // ]
 };
+
+
+// other solution for knex bundling:
+// const { NormalModuleReplacementPlugin } = require('webpack');
+// module.exports = {
+//   ...
+//   plugins: [
+//     // Ignore knex dynamic required dialects that we don't use
+//     new NormalModuleReplacementPlugin(
+//       /m[sy]sql2?|oracle(db)?|sqlite3|pg-(native|query)/,
+//       'noop2'
+//     ),
+//   ],
+// }
