@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 
 
-// * IMPORT THE ROUTES from Router
+// * IMPORT THE ROUTES
 const homeRoute = require('./routes/homepage-router');
 const friendsRoutes = require('./routes/friends-router');
 // ***
@@ -29,7 +29,7 @@ app.use('/friends', friendsRoutes);
 // ***
 
 
-// ! PRODUCTION ?
+// development localhost
 app.listen(3000, () => {
 	console.log('Listening on port 3000...');
 });
