@@ -1,3 +1,4 @@
+const serverless = require('serverless-http');
 const express = require('express');
 const app = express();
 
@@ -35,7 +36,20 @@ app.listen(3000, () => {
 });
 
 
-module.exports = app;
+// this is it!
+module.exports.handler = serverless(app);
+
+// or as a promise
+// const handler = serverless(app);
+// module.exports.handler = async (event, context) => {
+//   // you can do other things here
+//   const result = await handler(event, context);
+//   // and here
+//   return result;
+// };
+
+
+// module.exports = app;
 
 
 
