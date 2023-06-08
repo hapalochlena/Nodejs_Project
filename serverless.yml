@@ -8,6 +8,8 @@ provider:
   region: eu-central-1
   # timeout: 30
   # memorySize: 512
+  environment:
+    RDS_PASSWORD: ${env.RDS_PASSWORD}
 
 plugins:
   - serverless-webpack
@@ -52,34 +54,46 @@ package:
 # ! all of this okay in serverless.yml? actually CloudFormation
 resources:
   Resources:
+    # MyRDSInstance:
+    #   Type: AWS::RDS::DBInstance
+    #   Properties:
+    #     Engine: postgresql
+    #     DBInstanceIdentifier: database-instance-serverlessyml # name for the DB instance (if you don't specify a name, AWS CloudFormation generates a unique physical ID)
+    #     DBName: serverless-db # The name of the database to create when the DB instance is created. If this parameter is not specified, the default postgres database is created in the DB instance
+    #     AllocatedStorage: "20" # ! string
+    #     DBInstanceClass: db.t3.micro
+    #     EngineVersion: "14.7" # ! string
+    #     MasterUsername: postgres
+    #     MasterUserPassword: RDS_PASSWORD # !
+    #     PubliclyAccessible: true
+    #     DBSecurityGroups:
+    #       - Ref: "MySecurityGroup"
+    # MySecurityGroup:
+    #   Type: AWS::RDS::DBSecurityGroup
+    #   Properties:
+    #     GroupDescription: Allow access to RDS instance
+    #     DBSecurityGroupIngress:
+    #       -
+    #         # CIDRIP: String # The IP range to authorize.
+    #         EC2SecurityGroupName: default # Name of the EC2 security group to authorize. For VPC DB security groups, EC2SecurityGroupId must be provided. Otherwise, EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId must be provided.
+    #         # EC2SecurityGroupId: sg-08d6b05ea8b61959f # Id of the EC2 security group to authorize. For VPC DB security groups, EC2SecurityGroupId must be provided. Otherwise, EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId must be provided.
+    #         EC2SecurityGroupOwnerId: "577578430541" # AWS account number of the owner of the EC2 security group specified in the EC2SecurityGroupName parameter. The AWS access key ID isn't an acceptable value. For VPC DB security groups, EC2SecurityGroupId must be provided. Otherwise, EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId must be provided.
+    #                                                   # ! string
+    #         # * values taken from the 'default' security group that was automatically created when manually creating a free-tier RDS db instance following a tutorial
+    #         # * 'default' sg => Your AWS account automatically has a default security group for the default VPC in each Region.
+    #         # * all inbound traffic blocked by default; all outbound traffic authorised by default
     MyRDSInstance:
       Type: AWS::RDS::DBInstance
       Properties:
         Engine: postgresql
-        DBInstanceIdentifier: database-instance-serverlessyml # name for the DB instance (if you don't specify a name, AWS CloudFormation generates a unique physical ID)
-        DBName: test-db # The name of the database to create when the DB instance is created. If this parameter is not specified, the default postgres database is created in the DB instance
+        DBInstanceIdentifier: database-without-sg # name for the DB instance (if you don't specify a name, AWS CloudFormation generates a unique physical ID)
+        DBName: sg-db # The name of the database to create when the DB instance is created. If this parameter is not specified, the default postgres database is created in the DB instance
         AllocatedStorage: "20" # ! string
         DBInstanceClass: db.t3.micro
         EngineVersion: "14.7" # ! string
         MasterUsername: postgres
-        MasterUserPassword: b2YnvAe3dnLt5C # !
+        MasterUserPassword: RDS_PASSWORD # !
         PubliclyAccessible: true
-        DBSecurityGroups:
-          - Ref: "MySecurityGroup"
-    MySecurityGroup:
-      Type: AWS::RDS::DBSecurityGroup
-      Properties:
-        GroupDescription: Allow access to RDS instance
-        DBSecurityGroupIngress:
-          -
-            # CIDRIP: String # The IP range to authorize.
-            EC2SecurityGroupName: default # Name of the EC2 security group to authorize. For VPC DB security groups, EC2SecurityGroupId must be provided. Otherwise, EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId must be provided.
-            EC2SecurityGroupId: sg-08d6b05ea8b61959f # Id of the EC2 security group to authorize. For VPC DB security groups, EC2SecurityGroupId must be provided. Otherwise, EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId must be provided.
-            EC2SecurityGroupOwnerId: "577578430541" # AWS account number of the owner of the EC2 security group specified in the EC2SecurityGroupName parameter. The AWS access key ID isn't an acceptable value. For VPC DB security groups, EC2SecurityGroupId must be provided. Otherwise, EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId must be provided.
-                                                      # ! string
-            # * values taken from the 'default' security group that was automatically created when manually creating a free-tier RDS db instance following a tutorial
-            # * 'default' sg => Your AWS account automatically has a default security group for the default VPC in each Region.
-            # * all inbound traffic blocked by default; all outbound traffic authorised by default
 
 functions:
   # hello: # lambda function called 'hello'
