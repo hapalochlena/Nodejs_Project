@@ -1,30 +1,114 @@
-// const { readFile } = require('fs').promises;
-const knex = require('knex');
+// * LOCAL db Connection
 
-const db = knex({
-	client: 'pg', // pg = posgres
-	connection: {   // tell it where the database lives
-		host : '127.0.0.1', // 127.0.0.1 = localhost => later different when hosted on a separate platform
-		port : 5432,  // port for Postgres
-		user : 'Lena',  // name as appears in the 'Owner' column when you do \d to see db tables
-		password : '',
-		database : 'friend-reminder'
-	}
-});
+// const knex = require('knex');
 
-// console.log(db.select('*').from('users'));
-// => logs the query statement that Knex builds
-
-// db.select('*').from('users'); // returns a promise => access it:
-// db.select('*').from('users').then(data => {
-// 	console.log(data);
+// const db = knex({
+// 	client: 'pg', // pg = posgres
+// 	connection: {   // tell it where the database lives
+// 		host : '127.0.0.1', // 127.0.0.1 = localhost => later different when hosted on a separate platform
+// 		port : 5432,  // port for Postgres
+// 		user : 'Lena',  // name as appears in the 'Owner' column when you do \d to see db tables
+// 		password : '',
+// 		database : 'friend-reminder'
+// 	}
 // });
 
+///////////////
+
 const fetchingFriends = () => {
+  const db = require('knex')({
+    client: 'pg',
+    connection: {   // tell it where the database lives
+      // ! host : '127.0.0.1', // 127.0.0.1 = localhost => later different when hosted on a separate platform
+      // ! port : 5432,  // port for Postgres
+      user : 'Lena',  // name as appears in the 'Owner' column when you do \d to see db tables
+      // ! password : '',
+      database : 'friend-reminder'
+    }
+  });
 	return db.select('*').from('friends')
-		.then(data => data)
-		.catch(error => console.log(error));
+		// .then(data => data)
+    .then((data) => {
+      console.log('received data: ', data);
+      db.client.destroy();
+      return data;
+    })
+		// .catch(error => console.log(error));
+    .catch((error) => {
+      console.log('error occurred: ', error);
+      db.client.destroy();
+    });
 };
+
+// exports.handler = (event, context, callback) => {
+//   console.log('event received: ', event);
+
+//   // Connect
+//   const knex = require('knex')({
+//     client: 'pg',
+//     connection: {...},
+//   });
+
+//   console.log('knex connection: ', knex);
+
+//   knex('goals')
+//     .then((goals) => {
+//       console.log('received goals: ', goals);
+//       knex.client.destroy();
+//       return callback(null, goals);
+//     })
+//     .catch((err) => {
+//       console.log('error occurred: ', err);
+//       // Disconnect
+//       knex.client.destroy();
+//       return callback(err);
+//     });
+// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const selectingFriend = (id) => {
   return db('friends').where('id', id)
