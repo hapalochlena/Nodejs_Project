@@ -15,28 +15,44 @@
 
 ///////////////
 
+const knex = require('knex');
+const db = knex({
+  client: 'pg',
+  connection: {   // tell it where the database lives
+    // ! host : '127.0.0.1', // 127.0.0.1 = localhost => later different when hosted on a separate platform
+    port : 5432,  // port for Postgres
+    user : 'Lena',  // name as appears in the 'Owner' column when you do \d to see db tables
+    // ! password : '',
+    database : 'friend-reminder'
+
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME
+  }
+  // migrations: {
+  //   tableName: 'knex_migrations',
+  //   directory: __dirname + '/src/db/migrations',
+  // },
+  // seeds: {
+  //     directory: __dirname + '/src/db/seeds'
+  // }
+});
+
+// ! dotenv
+
 const fetchingFriends = () => {
-  const db = require('knex')({
-    client: 'pg',
-    connection: {   // tell it where the database lives
-      // ! host : '127.0.0.1', // 127.0.0.1 = localhost => later different when hosted on a separate platform
-      // ! port : 5432,  // port for Postgres
-      user : 'Lena',  // name as appears in the 'Owner' column when you do \d to see db tables
-      // ! password : '',
-      database : 'friend-reminder'
-    }
-  });
 	return db.select('*').from('friends')
 		// .then(data => data)
     .then((data) => {
       console.log('received data: ', data);
-      db.client.destroy();
+      db.client.destroy(); // !
       return data;
     })
 		// .catch(error => console.log(error));
     .catch((error) => {
       console.log('error occurred: ', error);
-      db.client.destroy();
+      db.client.destroy(); // !
     });
 };
 
