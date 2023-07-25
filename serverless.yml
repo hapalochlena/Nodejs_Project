@@ -37,9 +37,7 @@ provider:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
         # This configuration will attach the AWSLambdaVPCAccessExecutionRole managed policy to the IAM role that the Serverless Framework automatically creates for your service.
         # This IAM role is used by all the functions in your service, including the existing ones.
-
-
-
+        # The AWSLambdaVPCAccessExecutionRole is a managed policy provided by AWS that grants permissions for Lambda functions to be executed within a VPC.
 
 plugins:
   - serverless-webpack
@@ -81,7 +79,6 @@ package:
 #       - nodejs18.x
 
 # * RDS database
-# ! all of this okay in serverless.yml? actually CloudFormation
 resources:
   Resources:
     MyRDSInstance:
@@ -108,10 +105,21 @@ resources:
     #         EC2SecurityGroupName: default # Name of the EC2 security group to authorize. For VPC DB security groups, EC2SecurityGroupId must be provided. Otherwise, EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId must be provided.
     #         # EC2SecurityGroupId: sg-08d6b05ea8b61959f # Id of the EC2 security group to authorize. For VPC DB security groups, EC2SecurityGroupId must be provided. Otherwise, EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId must be provided.
     #         EC2SecurityGroupOwnerId: "577578430541" # AWS account number of the owner of the EC2 security group specified in the EC2SecurityGroupName parameter. The AWS access key ID isn't an acceptable value. For VPC DB security groups, EC2SecurityGroupId must be provided. Otherwise, EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId must be provided.
-    #                                                   # ! string
     #         # * values taken from the 'default' security group that was automatically created when manually creating a free-tier RDS db instance following a tutorial
     #         # * 'default' sg => Your AWS account automatically has a default security group for the default VPC in each Region.
     #         # * all inbound traffic blocked by default; all outbound traffic authorised by default
+    # ! how do I add this part without conflicting with the managedPolicies section?
+    LambdaSecurityGroup:
+      Type: 'AWS::EC2::SecurityGroup'
+      Properties:
+        GroupName: 'LambdaSecurityGroup'
+        GroupDescription: 'Security Group for Lambda Function'
+        SecurityGroupIngress:
+          - IpProtocol: 'tcp'
+            FromPort: 443 # Port 443 is the standard port for HTTPS traffic.
+            ToPort: 443 # ! different port in order to connect to RDS?
+            CidrIp: '0.0.0.0/0' # '0.0.0.0/0' is a CIDR notation that represents all possible IP addresses, meaning this rule allows traffic from any IP address.
+        VpcId: 'vpc-0e3ef276e98a63c5a'
 
 functions:
   # hello: # lambda function called 'hello'
@@ -125,33 +133,20 @@ functions:
     events:
       - httpApi: '*' # API Gateway event; '*' = paths like 'GET /hello'
 
-  # ! 2) create security group called LambdaSecurityGroup
+    # !!! how do I add this part without conflicting with the managedPolicies section?
+    # vpc:
+    #   securityGroupIds:
+    #     - Ref: LambdaSecurityGroup
+    #   subnetIds:
+    #     - 'subnet-04a4274a3679ac2bf'
+    #     - 'subnet-007b74feadb13351e'
+    #     - 'subnet-0de25b955403ac627'
 
-  # ! 3) join vpc + select LambdaSecurityGroup
-  #   vpc:
-  #     securityGroupIds:
-  #       - <your-security-group-id>
-  #     subnetIds:
-  #       - <your-subnet-id>
-
-
-
-  # securityGroupIds:
-  #   - ${self:custom.lambdaSecurityGroupId}
-  # subnetIds:
-  #   - ${self:custom.privateSubnetA}
-  #   - ${self:custom.privateSubnetB}
-  #   - ${self:custom.privateSubnetC}
-
-  # custom:
-  #   lambdaSecurityGroupId: <your-lambda-security-group-id>
-  #   privateSubnetA: <your-private-subnet-a-id>
-  #   privateSubnetB: <your-private-subnet-b-id>
-  #   privateSubnetC: <your-private-subnet-c-id>
 
 
 
   # ! 4) modify RDS security group : inbound rules : postgresql + LambdaSecurityGroup
+  # ? => modify default sg or create new sg specific to RDS?
 
 
       # - httpAPi:
