@@ -25,10 +25,10 @@ const db = knex({
     // ! password : '',
     database : 'friend-reminder'
 
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME
+    // host: process.env.DB_HOST,
+    // user: process.env.DB_USER,
+    // password: process.env.DB_PASS,
+    // database: process.env.DB_NAME
   }
   // migrations: {
   //   tableName: 'knex_migrations',
@@ -59,7 +59,7 @@ const fetchingFriends = () => {
 // exports.handler = (event, context, callback) => {
 //   console.log('event received: ', event);
 
-//   // Connect
+//   * Connect
 //   const knex = require('knex')({
 //     client: 'pg',
 //     connection: {...},
@@ -75,7 +75,7 @@ const fetchingFriends = () => {
 //     })
 //     .catch((err) => {
 //       console.log('error occurred: ', err);
-//       // Disconnect
+//       * Disconnect
 //       knex.client.destroy();
 //       return callback(err);
 //     });
