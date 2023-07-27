@@ -10,6 +10,37 @@ provider:
   # memorySize: 512
   environment:
     RDS_PASSWORD: ${env.RDS_PASSWORD}
+  #! IAM ROLE POLICY ATTACHMENT: Deployed it once with the red lines commented in to attach the policy to the lambda. Then added the 'vpv' part under 'functions', commented the red lines here out because of conflict, and deployed again.
+  #! iam:
+  #!   role:
+      #* From Serverless doc:
+      # statements:
+        # # Allow functions to list all buckets
+        # - Effect: Allow
+        #   Action: 's3:ListBucket'
+        #   Resource: '*'
+        # # Allow functions to read/write objects in a bucket
+        # - Effect: Allow
+        #   Action:
+        #     - 's3:GetObject'
+        #     - 's3:PutObject'
+        #   Resource:
+        #     - 'arn:aws:s3:::my-bucket-name/*'
+        #* My 1st attempt:
+        # # Allow functions to join VPC
+        # - Effect: Allow
+        #   Action:
+        #     - "iam:PassRole"
+        #   Resource:
+        #     - "arn:aws:iam::577578430541:role/AWSLambdaVPCAccessExecutionRole"
+      #* My 2nd attempt:
+      #! managedPolicies:
+      #!   - arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+        # 'arn:aws:iam::789763425617:policy/someteam/MyManagedPolicy-3QUG1777293EJ'
+        # 577578430541
+        # This configuration will attach the AWSLambdaVPCAccessExecutionRole managed policy to the IAM role that the Serverless Framework automatically creates for your service.
+        # This IAM role is used by all the functions in your service, including the existing ones.
+        # The AWSLambdaVPCAccessExecutionRole is a managed policy provided by AWS that grants permissions for Lambda functions to be executed within a VPC.
 
 plugins:
   - serverless-webpack
@@ -50,8 +81,12 @@ package:
 #     compatibleRuntimes:
 #       - nodejs18.x
 
-# * RDS database
-# ! all of this okay in serverless.yml? actually CloudFormation
+
+
+
+  # ! 4) modify RDS security group : inbound rules : postgresql + LambdaSecurityGroup
+  # ? => modify default sg or create new sg specific to RDS?
+
 resources:
   Resources:
     MyRDSInstance:
@@ -78,10 +113,20 @@ resources:
     #         EC2SecurityGroupName: default # Name of the EC2 security group to authorize. For VPC DB security groups, EC2SecurityGroupId must be provided. Otherwise, EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId must be provided.
     #         # EC2SecurityGroupId: sg-08d6b05ea8b61959f # Id of the EC2 security group to authorize. For VPC DB security groups, EC2SecurityGroupId must be provided. Otherwise, EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId must be provided.
     #         EC2SecurityGroupOwnerId: "577578430541" # AWS account number of the owner of the EC2 security group specified in the EC2SecurityGroupName parameter. The AWS access key ID isn't an acceptable value. For VPC DB security groups, EC2SecurityGroupId must be provided. Otherwise, EC2SecurityGroupOwnerId and either EC2SecurityGroupName or EC2SecurityGroupId must be provided.
-    #                                                   # ! string
     #         # * values taken from the 'default' security group that was automatically created when manually creating a free-tier RDS db instance following a tutorial
     #         # * 'default' sg => Your AWS account automatically has a default security group for the default VPC in each Region.
     #         # * all inbound traffic blocked by default; all outbound traffic authorised by default
+    LambdaSecurityGroup:
+      Type: 'AWS::EC2::SecurityGroup'
+      Properties:
+        GroupName: 'LambdaSecurityGroup'
+        GroupDescription: 'Security Group for Lambda Function'
+        SecurityGroupIngress:
+          - IpProtocol: 'tcp'
+            FromPort: 443 # Port 443 is the standard port for HTTPS traffic.
+            ToPort: 443 # ! different port in order to connect to RDS?
+            CidrIp: '0.0.0.0/0' # '0.0.0.0/0' is a CIDR notation that represents all possible IP addresses, meaning this rule allows traffic from any IP address.
+        VpcId: 'vpc-0e3ef276e98a63c5a'
 
 functions:
   # hello: # lambda function called 'hello'
@@ -103,6 +148,13 @@ functions:
       # - schedule: rate(10 minutes)
       # - sns: greeter-topic
       # - stream: ...
+    vpc:
+      securityGroupIds:
+        - !Ref LambdaSecurityGroup
+      subnetIds:
+        - 'subnet-04a4274a3679ac2bf'
+        - 'subnet-007b74feadb13351e'
+        - 'subnet-0de25b955403ac627'
     # * ENVIRONMENT (.env):
     # environment:
       # NODE_ENV: development
