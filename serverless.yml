@@ -134,7 +134,7 @@ resources:
             CidrIp: '0.0.0.0/0' # '0.0.0.0/0' is a CIDR notation that represents all possible IP addresses, meaning this rule allows traffic from any IP address.
         SecurityGroupEgress:
           - IpProtocol: 'tcp'
-            FromPort: 5432
+            FromPort: 5432 # = PostgreSQL
             ToPort: 5432
             DestinationSecurityGroupId: !GetAtt MyRDSInstanceSecurityGroup.GroupId
         VpcId: 'vpc-0e3ef276e98a63c5a'
