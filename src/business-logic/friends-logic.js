@@ -1,41 +1,3 @@
-const { Client } = require('pg');
-
-const client = new Client({
-    host: '127.0.0.1',
-    user: 'my_username',
-    database: 'my_database',
-    password: 'my_password',
-    port: 5432,
-});
-
-const newTableFromQuery = async () => {
-	const query = `
-            CREATE TABLE "users_without_email" AS
-                SELECT *
-                FROM "users"
-                WHERE "email" IS NULL;
-    `;
-    await client.connect();  // creates connection
-    try {
-        await client.query(query);  // sends query
-    } finally {
-        await client.end();  // closes connection
-    }
-};
-
-newTableFromQuery()
-    .then(() => console.table('New table created!'))
-    .catch(error => console.error(error.stack));
-
-
-
-
-
-
-
-
-
-
 // * PROD stage ––> RDS Connection
 
 //* You need to update your knex.js configuration to connect to the AWS RDS PostgreSQL database.
@@ -272,6 +234,7 @@ const deletingFriendLogic = (id) => {
 // 	connection: {   // tell it where the database lives
 // 		host : '127.0.0.1', // 127.0.0.1 = localhost => later different when hosted on a separate platform
 // 		port : 5432,  // port for Postgres
+      // ! !!!!!! .env instead of 'Lena'
 // 		user : 'Lena',  // name as appears in the 'Owner' column when you do \d to see db tables
 // 		password : '',
 // 		database : 'friend-reminder'
