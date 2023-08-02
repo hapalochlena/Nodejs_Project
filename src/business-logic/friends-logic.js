@@ -1,8 +1,46 @@
+const { Client } = require('pg');
+
+const client = new Client({
+    host: '127.0.0.1',
+    user: 'my_username',
+    database: 'my_database',
+    password: 'my_password',
+    port: 5432,
+});
+
+const newTableFromQuery = async () => {
+	const query = `
+            CREATE TABLE "users_without_email" AS
+                SELECT *
+                FROM "users"
+                WHERE "email" IS NULL;
+    `;
+    await client.connect();  // creates connection
+    try {
+        await client.query(query);  // sends query
+    } finally {
+        await client.end();  // closes connection
+    }
+};
+
+newTableFromQuery()
+    .then(() => console.table('New table created!'))
+    .catch(error => console.error(error.stack));
+
+
+
+
+
+
+
+
+
+
 // * PROD stage ––> RDS Connection
 
 //* You need to update your knex.js configuration to connect to the AWS RDS PostgreSQL database.
 
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/../../.env' });
 
 const knex = require('knex');
 const db = knex({
@@ -12,11 +50,11 @@ const db = knex({
     user: process.env.DB_USER,
     password: process.env.DB_PASS,
     database: process.env.DB_NAME
+  },
+  migrations: {
+    tableName: 'knex_migrations',
+    directory: __dirname + '/../db/migrations',
   }
-  // migrations: {
-  //   tableName: 'knex_migrations',
-  //   directory: __dirname + '/src/db/migrations',
-  // },
   // seeds: {
   //     directory: __dirname + '/src/db/seeds'
   // }
@@ -176,6 +214,54 @@ const deletingFriendLogic = (id) => {
 
 ///////////////
 
+// * part below still to be added for local use
+
+// const { Pool, Client } = require('pg')
+// const client = new Client({
+//     user: 'postgres',
+//     host: 'localhost',
+//     password: 'postgres',
+//     port: 5432
+// })
+// await client.connect()
+// await client.query(`DROP DATABASE IF EXISTS ${dbname};`)
+// await client.query(`CREATE DATABASE ${dbname};`)
+// await client.end()
+
+//call the pool you just created after the database has been created.
+
+// * OR:
+
+// const { Client } = require('pg');
+
+// const client = new Client({
+//     host: '127.0.0.1',
+//     user: 'my_username',
+//     database: 'my_database',
+//     password: 'my_password',
+//     port: 5432,
+// });
+
+// const newTableFromQuery = async () => {
+// 	const query = `
+//             CREATE TABLE "users_without_email" AS
+//                 SELECT *
+//                 FROM "users"
+//                 WHERE "email" IS NULL;
+//     `;
+//     await client.connect();  // creates connection
+//     try {
+//         await client.query(query);  // sends query
+//     } finally {
+//         await client.end();  // closes connection
+//     }
+// };
+
+// newTableFromQuery()
+//     .then(() => console.table('New table created!'))
+//     .catch(error => console.error(error.stack));
+
+///////////////
 
 // * DEV stage ––> LOCAL db Connection
 

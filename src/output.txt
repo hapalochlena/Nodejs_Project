@@ -1,0 +1,1 @@
+{"statusCode":200,"headers":{"x-powered-by":"Express","content-type":"text/html; charset=utf-8","content-length":"62","etag":"W/\"3e-UXCRhZwhntUBoViIfboi3m0G5l8\""},"isBase64Encoded":false,"body":"<h1>Hello World</h1><br><a href=\"/friends\">Show my friends</a>"}
