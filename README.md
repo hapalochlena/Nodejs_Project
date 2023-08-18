@@ -30,6 +30,3 @@ To run the project with Nodemon, use `npm run dev`.
 This will start the application using a development server that automatically reloads the server when changes are made to the code.
 
 Note: The default port for the application is set to 3000.
-
-
-https://ofllyw4mv9.execute-api.eu-central-1.amazonaws.com
